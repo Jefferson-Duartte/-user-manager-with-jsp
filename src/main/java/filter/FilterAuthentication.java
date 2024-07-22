@@ -51,6 +51,9 @@ public class FilterAuthentication implements Filter {
             connection.commit();
         } catch (Exception e) {
             e.printStackTrace();
+            request.setAttribute("msg", e.getMessage());
+            RequestDispatcher redirect = request.getRequestDispatcher("error.jsp");
+            redirect.forward(request, response);
             try {
                 connection.rollback();
             } catch (SQLException ex) {
