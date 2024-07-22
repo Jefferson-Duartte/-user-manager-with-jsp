@@ -7,11 +7,11 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
-public class DAOLoginRepositoty {
+public class DAOLoginRepository {
 
     private Connection connection;
 
-    public DAOLoginRepositoty() {
+    public DAOLoginRepository() {
         connection = SingleConnection.getConnection();
     }
 
