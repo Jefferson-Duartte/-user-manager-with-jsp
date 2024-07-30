@@ -5,6 +5,12 @@
 <html lang="pt-br">
 
 <jsp:include page="head.jsp"/>
+<style>
+    .isFalse {
+        display: none;
+    }
+
+</style>
 
 <body>
 <%--Pre-Loader--%>
@@ -32,16 +38,17 @@
                                             <div class="card">
                                                 <div class="card-header">
                                                     <h5>Cadastre um novo usuário</h5>
-                                                    <!--<span>Add class of <code>.form-control</code> with <code>&lt;input&gt;</code> tag</span>-->
                                                 </div>
 
                                                 <%
                                                     Login user = (Login) request.getAttribute("dataLogin");
+                                                    String id = "";
                                                     String name = "";
                                                     String email = "";
                                                     String login = "";
                                                     String password = "";
-                                                    if (user != null) {
+                                                    if (user != null ) {
+                                                        id = String.valueOf(user.getId());
                                                         name = user.getName();
                                                         email = user.getEmail();
                                                         login = user.getLogin();
@@ -57,7 +64,7 @@
                                                           action="<%=request.getContextPath()%>/ServletUserController"
                                                           method="post">
                                                         <div class="form-group">
-                                                            <input type="text" name="id" class="form-control" readonly>
+                                                            <input type="text" name="id" class="form-control" readonly value="<%=id%>">
                                                             <span class="form-bar"></span>
                                                             <label class="float-label">ID</label>
                                                         </div>
@@ -97,6 +104,19 @@
                                                         </button>
                                                         <button class="btn btn-danger waves-effect waves-light">Excluir
                                                         </button>
+                                                        <%
+                                                            String msg = (String) request.getAttribute("msg");
+                                                            String style = "";
+                                                            if (msg == null || msg == "null") {
+                                                                msg = "";
+                                                                style = "isFalse";
+                                                            }
+
+                                                        %>
+
+                                                    <div class="alert alert-success mt-4 col-md-3  <%=style%>" role="alert">
+                                                        <%=msg%>
+                                                    </div>
                                                     </form>
                                                 </div>
                                             </div>
@@ -107,6 +127,7 @@
                         </div>
                     </div>
                 </div>
+
                 <%--JavaScript imports--%>
                 <jsp:include page="javascriptfile.jsp"/>
 </body>
