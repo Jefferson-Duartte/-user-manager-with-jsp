@@ -1,88 +1,127 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-
 <!DOCTYPE html>
-<html>
+<html lang="pt-br">
+
 <head>
-    <title>Hello JSP</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Login - User Manager</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+    <meta name="description"
+          content="Login"/>
+    <meta name="author" content="Jefferson Duarte"/>
+    <!-- Favicon icon -->
+
+    <!-- Google font-->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,500" rel="stylesheet">
+    <!-- Required Fremwork -->
+    <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/assets/css/bootstrap/css/bootstrap.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="icon" href="<%=request.getContextPath()%>/assets/images/favicon.ico" type="image/x-icon">
+
+    <!-- waves.css -->
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/assets/pages/waves/css/waves.min.css" type="text/css" media="all">
+    <!-- themify-icons line icon -->
+    <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/assets/icon/themify-icons/themify-icons.css">
+    <!-- ico font -->
+    <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/assets/icon/icofont/css/icofont.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/assets/icon/font-awesome/css/font-awesome.min.css">
+    <!-- Style.css -->
+    <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/assets/css/style.css">
 
     <style>
-
-        *{
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        .isFalse {
+            display: none;
         }
 
-        body{
-            width: 100vw;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
+        .alert {
 
-        form{
-            width: 50%;
-            padding-top: 50px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-
-        }
-        h1{
-            text-align: center;
-        }
-
-        a{
-            text-decoration: none;
-        }
-
-        #btn-login{
-            margin-top: 10px;
-            width: 200px;
-        }
-
-        #msg-error{
-            color: red;
-            text-align: center;
         }
 
     </style>
-
-
 </head>
-<body>
 
+<body themebg-pattern="theme1">
 
-<form class="row g-3" action="ServletLogin" method="POST">
-<h1>Login</h1>
+<section class="login-block">
+    <!-- Container-fluid starts -->
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
 
-    <input type="hidden" value="<%= request.getParameter("url")%>" name="url">
+                <form class="md-float-material form-material" action="ServletLogin" method="post">
+                    <%--                    <div class="text-center">--%>
+                    <%--                        <img src="<%=request.getContextPath()%>/<%=request.getContextPath()%>/assets/images/logo.png" alt="logo.png">--%>
+                    <%--                    </div>--%>
+                    <div class="auth-box card">
+                        <div class="card-block">
+                            <div class="row m-b-20">
+                                <div class="col-md-12">
+                                    <h3 class="text-center">Entrar</h3>
+                                </div>
+                            </div>
+                            <div class="form-group form-primary">
+                                <input type="text" name="login" class="form-control" required="">
+                                <span class="form-bar"></span>
+                                <label class="float-label">Usuário</label>
+                            </div>
+                            <div class="form-group form-primary">
+                                <input type="password" name="password" class="form-control" required="">
+                                <span class="form-bar"></span>
+                                <label class="float-label">Senha</label>
+                            </div>
+                            <div class="row m-t-25 text-left">
+                                <div class="col-12">
 
-    <div class="col-md-6">
-        <label for="inputEmail4" class="form-label">Login</label>
-        <input name="login" type="text" class="form-control" id="inputEmail4">
+                                    <div class="forgot-phone text-left   f-left">
+                                        <a href="<%=request.getContextPath()%>/forgotPassword.jsp" class="text-right f-w-600"> Esqueci minha senha</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row m-t-30">
+                                <div class="col-md-12">
+                                    <button type="submit"
+                                            class="btn btn-primary btn-md btn-block waves-effect waves-light text-center m-b-20">
+                                        Entrar
+                                    </button>
+                                </div>
+                            </div>
+                            <hr/>
+                            <div class="row">
+                                <%--                                <div class="col-md-10">--%>
+                                <%--                                    <p class="text-inverse text-left m-b-0">Thank you.</p>--%>
+                                <%--                                    <p class="text-inverse text-left"><a href="index.html"><b>Back to website</b></a></p>--%>
+                                <%--                                </div>--%>
+                                <%--                                <div class="col-md-2">--%>
+                                <%--                                    <img src="<%=request.getContextPath()%>/<%=request.getContextPath()%>/assets/images/auth/Logo-small-bottom.png" alt="small-logo.png">--%>
+                                <%--                                </div>--%>
+                                <%
+                                    String msg = (String) request.getAttribute("msg");
+                                    String style = "";
+                                    if (msg == null || msg == "null") {
+                                        msg = "";
+                                        style = "isFalse";
+                                    }
+
+                                %>
+
+                                <div class="alert alert-warning <%=style%>" + role="alert">
+                                    <%=msg%>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <!-- end of form -->
+            </div>
+            <!-- end of col-sm-12 -->
+        </div>
+        <!-- end of row -->
     </div>
-    <div class="col-md-6">
-        <label for="inputPassword4" class="form-label">Senha</label>
-        <input name="password" type="password" class="form-control" id="inputPassword4">
-        <a href="/forgotPassword.jsp" target="_blank">Esqueci minha senha</a>
-    </div>
+    <!-- end of container-fluid -->
+</section>
 
-    <button type="submit" class="btn btn-primary" id="btn-login">Entrar</button>
-
-
-    <p id="msg-error"><%= request.getAttribute("msg") %></p>
-
-</form>
-
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-        crossorigin="anonymous"></script>
 </body>
+
 </html>
