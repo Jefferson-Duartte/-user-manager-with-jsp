@@ -35,10 +35,6 @@
             display: none;
         }
 
-        .alert {
-
-        }
-
     </style>
 </head>
 

@@ -977,7 +977,7 @@ a.mytooltip {
     border: 1px solid #448aff;
     color: #fff !important; }
 
-.card .jFiler-item-<%=request.getContextPath()%>/assets ul li {
+.card .jFiler-item-ul li {
   margin-right: 0; }
 
 /**====== File Upload css end ======**/
@@ -12184,9 +12184,9 @@ th {
   color: #448aff; }
 
 .alert-success {
-  background-color: #fff;
-  border-color: #11c15b;
-  color: #11c15b; }
+  background-color: #d1e7dd;
+  border-color:#a3cfbb;
+  color: #0a3622; }
 
 .alert-info {
   background-color: #fff;
