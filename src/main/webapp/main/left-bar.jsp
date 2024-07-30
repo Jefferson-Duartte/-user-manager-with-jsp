@@ -5,7 +5,7 @@
         <div class="">
             <div class="main-menu-header">
                 <img class="img-80 img-radius"
-                     src="<%=request.getContextPath()%>/assets/images/avatar-1.jpg"
+                     src="<%=request.getContextPath()%>/assets/images/patolino.jpg"
                      alt="User-Profile-Image">
                 <div class="user-details">
                                     <span id="more-details"><%=session.getAttribute("user")%><i
@@ -51,7 +51,7 @@
                 <ul class="pcoded-submenu">
                     <li class=" ">
                         <a href="<%=request.getContextPath()%>/main/create-user.jsp" class="waves-effect waves-dark">
-                            <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                            <span class="pcoded-micon"><i class="ti-plus"></i></span>
                             <span class="pcoded-mtext"
                                   data-i18n="nav.basic-components.alert">Cadastrar Usuário</span>
                             <span class="pcoded-mcaret"></span>
@@ -128,13 +128,13 @@
                 </ul>
             </li>
         </ul>
-        <div class="pcoded-navigation-label" data-i18n="nav.category.forms">Forms &amp; Tables</div>
+        <div class="pcoded-navigation-label" data-i18n="nav.category.forms">Gerenc. de Usuários</div>
         <ul class="pcoded-item pcoded-left-item">
             <li>
-                <a href="form-elements-component.html" class="waves-effect waves-dark">
-                    <span class="pcoded-micon"><i class="ti-layers"></i><b>FC</b></span>
+                <a href="<%=request.getContextPath()%>/main/create-user.jsp" class="waves-effect waves-dark">
+                    <span class="pcoded-micon"><i class="ti-plus"></i><b>FC</b></span>
                     <span class="pcoded-mtext"
-                          data-i18n="nav.form-components.main">Form Components</span>
+                          data-i18n="nav.form-components.main">Cadastrar Usuários</span>
                     <span class="pcoded-mcaret"></span>
                 </a>
             </li>
