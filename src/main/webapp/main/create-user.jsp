@@ -47,7 +47,7 @@
                                                     String email = "";
                                                     String login = "";
                                                     String password = "";
-                                                    if (user != null ) {
+                                                    if (user != null) {
                                                         id = String.valueOf(user.getId());
                                                         name = user.getName();
                                                         email = user.getEmail();
@@ -60,17 +60,19 @@
                                                 %>
 
                                                 <div class="card-block">
-                                                    <form class="form-material"
+                                                    <form class="form-material" id="create_user_form"
                                                           action="<%=request.getContextPath()%>/ServletUserController"
                                                           method="post">
-                                                        <div class="form-group">
-                                                            <input type="text" name="id" class="form-control" readonly value="<%=id%>">
+                                                        <input type="hidden" name="action" id="action" value=""/>
+                                                        <div class="form-group form-default form-static-label">
+                                                            <input type="text" name="id" class="form-control" readonly
+                                                                   value="<%=id%>">
                                                             <span class="form-bar"></span>
                                                             <label class="float-label">ID</label>
                                                         </div>
                                                         <div class="form-group form-default">
-                                                            <input type="text" name="name" class="form-control"
-                                                                   required value="<%=name%>">
+                                                            <input type="text" name="name" class="form-control" required
+                                                                   value="<%=name%>">
                                                             <span class="form-bar"></span>
                                                             <label class="float-label">Nome</label>
                                                         </div>
@@ -92,17 +94,18 @@
                                                             <span class="form-bar"></span>
                                                             <label class="float-label">Senha</label>
                                                         </div>
-                                                        <button
+                                                        <button onclick=cleanForm() type="button"
                                                                 class="btn btn-primary waves-effect waves-light">
                                                             Novo
                                                         </button>
-                                                        <button type="submit" \
+                                                        <button type="submit"
                                                                 class="btn btn-success waves-effect waves-light">
                                                             Salvar
                                                         </button>
                                                         <button class="btn btn-warning waves-effect waves-light">Editar
                                                         </button>
-                                                        <button class="btn btn-danger waves-effect waves-light">Excluir
+                                                        <button type="button" onclick=creteDelete()
+                                                                class="btn btn-danger waves-effect waves-light">Excluir
                                                         </button>
                                                         <%
                                                             String msg = (String) request.getAttribute("msg");
@@ -114,9 +117,10 @@
 
                                                         %>
 
-                                                    <div class="alert alert-success mt-4 col-md-3  <%=style%>" role="alert">
-                                                        <%=msg%>
-                                                    </div>
+                                                        <div class="alert alert-success mt-4 col-md-3  <%=style%>"
+                                                             role="alert" id="msg">
+                                                            <%=msg%>
+                                                        </div>
                                                     </form>
                                                 </div>
                                             </div>
@@ -128,8 +132,35 @@
                     </div>
                 </div>
 
+
                 <%--JavaScript imports--%>
                 <jsp:include page="javascriptfile.jsp"/>
+
+
+                <script>
+
+                    function creteDelete() {
+
+                        if (confirm("Deseja realmente excluir?")) {
+                            var form = document.getElementById("create_user_form");
+                            form.method = "get";
+                            document.getElementById("action").value = "Delete";
+                            form.submit();
+                        }
+
+                    }
+
+                    function cleanForm() {
+                        var elements = document.getElementById("create_user_form").elements;
+                        document.getElementById("msg").style.display = "none";
+                        for (let i = 0; i < elements.length; i++) {
+                            elements[i].value = "";
+                        }
+                    }
+
+                </script>
+
+
 </body>
 
 </html>
