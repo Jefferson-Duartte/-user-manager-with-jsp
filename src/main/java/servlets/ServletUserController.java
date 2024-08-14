@@ -1,5 +1,6 @@
 package servlets;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import dao.DAOUserRepository;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
@@ -10,6 +11,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import model.Login;
 
 import java.io.IOException;
+import java.util.List;
 
 @WebServlet("/ServletUserController")
 public class ServletUserController extends HttpServlet {
@@ -25,19 +27,37 @@ public class ServletUserController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         try {
-            String action = request.getParameter("action");
+            String action = request.getParameter("inputAction");
 
-            if (action != null && !action.isEmpty() && action.equalsIgnoreCase("delete")) {
+            if (action != null && !action.isEmpty()) {
 
-                Long userId = Long.parseLong(request.getParameter("id"));
-                System.out.println(userId);
-                daoUserRepository.deleteUser(userId);
+                if (action.equalsIgnoreCase("delete")) {
 
-                msg = "Usuário deletado com sucesso!";
-                request.setAttribute("msg", msg);
+                    Long userId = Long.parseLong(request.getParameter("id"));
+                    daoUserRepository.deleteUser(userId);
+
+                    msg = "Usuário deletado com sucesso!";
+                    request.setAttribute("msg", msg);
+
+                } else if (action.equalsIgnoreCase("searchUserAjax")) {
+                    String name = request.getParameter("name");
+
+                    List<Login> users = daoUserRepository.searchAllUsers(name);
+
+                    ObjectMapper mapper = new ObjectMapper();
+                    String json = mapper.writeValueAsString(users);
+
+                    response.setContentType("application/json");
+                    response.setCharacterEncoding("UTF-8");
+                    response.getWriter().write(json);
+
+                } else {
+                    request.getRequestDispatcher("main/create-user.jsp").forward(request, response);
+                }
+            } else {
+                request.getRequestDispatcher("main/create-user.jsp").forward(request, response);
 
             }
-            request.getRequestDispatcher("main/create-user.jsp").forward(request, response);
 
         } catch (Exception e) {
             e.printStackTrace();
