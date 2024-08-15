@@ -33,7 +33,7 @@ public class DAOUserRepository {
             connection.commit();
 
         } else {
-            String sql = "UPDATE public.tb_login SET login=?, password=?, name=?, email=? WHERE id = " + user.getId() + ";";
+            String sql = "UPDATE public.tb_login SET login=?, password=?, name=?, email=? WHERE id = " + user.getId();
 
             PreparedStatement statement = connection.prepareStatement(sql);
 
@@ -104,7 +104,14 @@ public class DAOUserRepository {
 
     }
 
-    public void deleteUser(Long userId) {
+    public void deleteUser(Long userId) throws Exception{
+
+        String sql = "DELETE FROM tb_login WHERE id = " + userId;
+
+        PreparedStatement statement = connection.prepareStatement(sql);
+
+        statement.execute();
+        connection.commit();
     }
 
 

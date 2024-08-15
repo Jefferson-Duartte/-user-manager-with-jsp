@@ -39,6 +39,9 @@ public class ServletUserController extends HttpServlet {
                     msg = "Usuário deletado com sucesso!";
                     request.setAttribute("msg", msg);
 
+                    request.getRequestDispatcher("main/create-user.jsp").forward(request, response);
+
+
                 } else if (action.equalsIgnoreCase("searchUserAjax")) {
                     String name = request.getParameter("name");
 
@@ -51,13 +54,13 @@ public class ServletUserController extends HttpServlet {
                     response.setCharacterEncoding("UTF-8");
                     response.getWriter().write(json);
 
-                } else {
-                    request.getRequestDispatcher("main/create-user.jsp").forward(request, response);
+                    return;
+
                 }
             } else {
                 request.getRequestDispatcher("main/create-user.jsp").forward(request, response);
-
             }
+
 
         } catch (Exception e) {
             e.printStackTrace();
