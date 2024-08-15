@@ -7,6 +7,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DAOUserRepository {
 
@@ -48,6 +50,29 @@ public class DAOUserRepository {
         return this.searchUser(user.getLogin());
     }
 
+    public List<Login> searchAllUsers(String name) throws Exception {
+
+        List<Login> users = new ArrayList<>();
+
+        String sql = "SELECT * FROM tb_login WHERE upper(name) like upper(?)";
+
+        PreparedStatement statement = connection.prepareStatement(sql);
+        statement.setString(1, "%" + name + "%");
+        ResultSet result = statement.executeQuery();
+
+        while (result.next()) {
+            Login user = new Login();
+            user.setId(result.getLong("id"));
+            user.setName(result.getString("name"));
+            user.setEmail(result.getString("email"));
+            user.setLogin(result.getString("login"));
+            users.add(user);
+        }
+
+        return users;
+
+    }
+
     public Login searchUser(String login) throws SQLException {
 
         String sql = "SELECT * FROM tb_login WHERE upper(login) = upper('" + login + "')";
@@ -78,5 +103,9 @@ public class DAOUserRepository {
 
 
     }
+
+    public void deleteUser(Long userId) {
+    }
+
 
 }
