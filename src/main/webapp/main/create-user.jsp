@@ -1,5 +1,11 @@
 <%@ page import="model.Login" %>
+<%@ page import="java.util.List" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
+
+<jsp:useBean id="dao" class="dao.DAOUserRepository"/>
+
 
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -15,6 +21,7 @@
 <body>
 <%--Pre-Loader--%>
 <jsp:include page="pre-loader.jsp"/>
+
 
 <div id="pcoded" class="pcoded">
     <div class="pcoded-overlay-box"></div>
@@ -40,57 +47,42 @@
                                                     <h5>Cadastre um novo usuário</h5>
                                                 </div>
 
-                                                <%
-                                                    Login user = (Login) request.getAttribute("dataLogin");
-                                                    String id = "";
-                                                    String name = "";
-                                                    String email = "";
-                                                    String login = "";
-                                                    String password = "";
-                                                    if (user != null) {
-                                                        id = String.valueOf(user.getId());
-                                                        name = user.getName();
-                                                        email = user.getEmail();
-                                                        login = user.getLogin();
-                                                        password = user.getPassword();
-
-                                                    }
-
-
-                                                %>
-
                                                 <div class="card-block">
                                                     <form class="form-material" id="create_user_form"
                                                           action="<%=request.getContextPath()%>/ServletUserController"
                                                           method="post">
-                                                        <input type="hidden" name="inputAction" id="inputAction" value=""/>
+                                                        <input type="hidden" name="urlAction" id="urlAction"
+                                                               value=""/>
                                                         <div class="form-group form-default form-static-label">
                                                             <input type="text" name="id" class="form-control" readonly
-                                                                   value="<%=id%>">
+                                                                   value="${dataLogin.id}">
                                                             <span class="form-bar"></span>
                                                             <label class="float-label">ID</label>
                                                         </div>
                                                         <div class="form-group form-default">
                                                             <input type="text" name="name" class="form-control" required
-                                                                   value="<%=name%>">
+                                                                   value="${dataLogin.name}">
                                                             <span class="form-bar"></span>
                                                             <label class="float-label">Nome</label>
                                                         </div>
                                                         <div class="form-group form-default">
                                                             <input type="email" name="email"
-                                                                   class="form-control" required value="<%=email%>">
+                                                                   class="form-control" required
+                                                                   value="${dataLogin.email}">
                                                             <span class="form-bar"></span>
                                                             <label class="float-label">E-mail</label>
                                                         </div>
                                                         <div class="form-group form-default">
                                                             <input type="text" name="login"
-                                                                   class="form-control" required value="<%=login%>">
+                                                                   class="form-control" required
+                                                                   value="${dataLogin.login}">
                                                             <span class="form-bar"></span>
                                                             <label class="float-label">Login</label>
                                                         </div>
                                                         <div class="form-group form-default">
                                                             <input type="password" name="password"
-                                                                   class="form-control" required value="<%=password%>">
+                                                                   class="form-control" required
+                                                                   value="${dataLogin.password}">
                                                             <span class="form-bar"></span>
                                                             <label class="float-label">Senha</label>
                                                         </div>
@@ -126,6 +118,30 @@
                                                             <%=msg%>
                                                         </div>
                                                     </form>
+                                                    <div style="height: 300px; overflow-y: scroll">
+                                                        <table class="table" id="table_all_users">
+                                                            <thead style="position: sticky">
+                                                            <tr>
+                                                                <th scope="col">ID</th>
+                                                                <th scope="col">Nome</th>
+                                                                <th scope="col">Email</th>
+                                                                <th scope="col">Visualizar</th>
+                                                            </tr>
+                                                            </thead>
+                                                            <tbody>
+
+                                                            <c:forEach var='user' items="${allUsers}">
+                                                                <tr>
+                                                                    <td><c:out value="${user.id}"/></td>
+                                                                    <td><c:out value="${user.name}"/></td>
+                                                                    <td><c:out value="${user.email}"/></td>
+                                                                    <td><c:out value="${user.email}"/></td>
+                                                                    <td><a href="<%=request.getContextPath()%>/ServletUserController?urlAction=editSearch&id=${user.id}"  class="btn btn-info">Ver</a></td>
+                                                                </tr>
+                                                            </c:forEach>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -156,20 +172,23 @@
                                     </div>
                                 </div>
 
-                                <table class="table">
-                                    <thead>
-                                    <tr>
-                                        <th scope="col">ID</th>
-                                        <th scope="col">Nome</th>
-                                        <th scope="col">Visualizar</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
+                                <div style="height: 300px; overflow-y: scroll">
+                                    <table class="table" id="resultTable">
+                                        <thead style="position: sticky">
+                                        <tr>
+                                            <th scope="col">ID</th>
+                                            <th scope="col">Nome</th>
+                                            <th scope="col">Visualizar</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
 
-                                    </tbody>
-                                </table>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
-                            <div class="modal-footer">
+                            <div class="modal-footer" style="display: flex; justify-content: space-between">
+                                <span id="totalResult"></span>
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
                             </div>
                         </div>
@@ -183,19 +202,30 @@
                 <script>
 
                     function searchUser() {
-                        var name = document.getElementById("search").value;
+                        let name = document.getElementById("search").value;
 
                         if (name != null && name !== "" && name.trim() !== "") {
 
-                            var urlAction = document.getElementById("create_user_form").action;
-                            console.log(urlAction)
+                            let urlAction = document.getElementById("create_user_form").action;
                             $.ajax({
                                 method: "get",
                                 url: urlAction,
-                                data: "name=" + name + '&inputAction=searchUserAjax',
+                                data: "name=" + name + '&urlAction=searchUserAjax',
                                 dataType: "json",
-                                success : function (resp) {
-                                    console.log(resp)
+                                success: function (resp) {
+
+
+                                    $('#resultTable > tbody > tr').remove();
+
+
+                                    for (let i = 0; i < resp.length; i++) {
+                                        $('#resultTable > tbody').append('<tr><td>' + resp[i].id + '</td><td>' + resp[i].name + '</td><td><button onclick=moreInfo(' + resp[i].id + ') type="button" class="btn btn-info">Ver</button></td> </tr>');
+
+                                    }
+
+                                    document.getElementById("totalResult").textContent = 'Resultados: ' + resp.length;
+
+
                                 }
 
                             }).fail(function (xhr, status, errorThrown) {
@@ -207,20 +237,26 @@
 
                     }
 
+                    function moreInfo(id) {
+                        let urlAction = document.getElementById("create_user_form").action;
+                        window.location.href = urlAction + "?urlAction=editSearch&id=" + id
+
+                    }
+
 
                     function creteDelete() {
 
                         if (confirm("Deseja realmente excluir?")) {
-                            var form = document.getElementById("create_user_form");
+                            let form = document.getElementById("create_user_form");
                             form.method = "get";
-                            document.getElementById("inputAction").value = "Delete";
+                            document.getElementById("urlAction").value = "Delete";
                             form.submit();
                         }
 
                     }
 
                     function cleanForm() {
-                        var elements = document.getElementById("create_user_form").elements;
+                        let elements = document.getElementById("create_user_form").elements;
                         document.getElementById("msg").style.display = "none";
                         for (let i = 0; i < elements.length; i++) {
                             elements[i].value = "";
