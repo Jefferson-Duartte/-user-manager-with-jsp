@@ -50,7 +50,7 @@
                 </a>
                 <ul class="pcoded-submenu">
                     <li class=" ">
-                        <a href="<%=request.getContextPath()%>/main/create-user.jsp" class="waves-effect waves-dark">
+                        <a href="<%=request.getContextPath()%>/ServletUserController?urlAction=getUsers" class="waves-effect waves-dark">
                             <span class="pcoded-micon"><i class="ti-plus"></i></span>
                             <span class="pcoded-mtext"
                                   data-i18n="nav.basic-components.alert">Cadastrar Usuário</span>
@@ -131,7 +131,7 @@
         <div class="pcoded-navigation-label" data-i18n="nav.category.forms">Gerenc. de Usuários</div>
         <ul class="pcoded-item pcoded-left-item">
             <li>
-                <a href="<%=request.getContextPath()%>/main/create-user.jsp" class="waves-effect waves-dark">
+                <a href="<%=request.getContextPath()%>/ServletUserController?urlAction=getUsers" class="waves-effect waves-dark">
                     <span class="pcoded-micon"><i class="ti-plus"></i><b>FC</b></span>
                     <span class="pcoded-mtext"
                           data-i18n="nav.form-components.main">Cadastrar Usuários</span>
