@@ -47,10 +47,10 @@ public class DAOUserRepository {
 
         }
 
-        return this.searchUser(user.getLogin());
+        return this.searchUserByLogin(user.getLogin());
     }
 
-    public List<Login> searchAllUsers(String name) throws Exception {
+    public List<Login> searchUsersByName(String name) throws Exception {
 
         List<Login> users = new ArrayList<>();
 
@@ -73,11 +73,53 @@ public class DAOUserRepository {
 
     }
 
-    public Login searchUser(String login) throws SQLException {
+    public List<Login> getAllUsers() throws Exception {
+
+        List<Login> users = new ArrayList<>();
+
+        String sql = "SELECT * FROM tb_login";
+
+        PreparedStatement statement = connection.prepareStatement(sql);
+        ResultSet result = statement.executeQuery();
+
+        while (result.next()) {
+            Login user = new Login();
+            user.setId(result.getLong("id"));
+            user.setName(result.getString("name"));
+            user.setEmail(result.getString("email"));
+            user.setLogin(result.getString("login"));
+            users.add(user);
+        }
+
+        return users;
+
+    }
+
+    public Login searchUserByLogin(String login) throws SQLException {
 
         String sql = "SELECT * FROM tb_login WHERE upper(login) = upper('" + login + "')";
 
         PreparedStatement statement = connection.prepareStatement(sql);
+        ResultSet result = statement.executeQuery();
+
+        Login user = new Login();
+        while (result.next()) {
+            user.setId(result.getLong("id"));
+            user.setName(result.getString("name"));
+            user.setEmail(result.getString("email"));
+            user.setLogin(result.getString("login"));
+            user.setPassword(result.getString("password"));
+        }
+
+        return user;
+    }
+
+    public Login searchUserById(Long userId) throws SQLException {
+
+        String sql = "SELECT * FROM tb_login  WHERE id = ?";
+
+        PreparedStatement statement = connection.prepareStatement(sql);
+        statement.setLong(1, userId);
         ResultSet result = statement.executeQuery();
 
         Login user = new Login();
@@ -104,7 +146,7 @@ public class DAOUserRepository {
 
     }
 
-    public void deleteUser(Long userId) throws Exception{
+    public void deleteUser(Long userId) throws Exception {
 
         String sql = "DELETE FROM tb_login WHERE id = " + userId;
 
