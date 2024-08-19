@@ -27,7 +27,7 @@ public class ServletUserController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         try {
-            String action = request.getParameter("inputAction");
+            String action = request.getParameter("urlAction");
 
             if (action != null && !action.isEmpty()) {
 
@@ -39,13 +39,16 @@ public class ServletUserController extends HttpServlet {
                     msg = "Usuário deletado com sucesso!";
                     request.setAttribute("msg", msg);
 
+                    List<Login> listUsers = daoUserRepository.getAllUsers();
+                    request.setAttribute("allUsers", listUsers);
+
                     request.getRequestDispatcher("main/create-user.jsp").forward(request, response);
 
 
                 } else if (action.equalsIgnoreCase("searchUserAjax")) {
                     String name = request.getParameter("name");
 
-                    List<Login> users = daoUserRepository.searchAllUsers(name);
+                    List<Login> users = daoUserRepository.searchUsersByName(name);
 
                     ObjectMapper mapper = new ObjectMapper();
                     String json = mapper.writeValueAsString(users);
@@ -55,6 +58,33 @@ public class ServletUserController extends HttpServlet {
                     response.getWriter().write(json);
 
                     return;
+
+                } else if (action.equalsIgnoreCase("editSearch")) {
+                    Long id = Long.parseLong(request.getParameter("id"));
+
+                    Login user = daoUserRepository.searchUserById(id);
+
+                    List<Login> listUsers = daoUserRepository.getAllUsers();
+                    request.setAttribute("allUsers", listUsers);
+
+                    request.setAttribute("msg", msg);
+                    request.setAttribute("dataLogin", user);
+                    request.getRequestDispatcher("main/create-user.jsp").forward(request, response);
+
+                    return;
+
+                }
+                else if (action.equalsIgnoreCase("getUsers")) {
+
+                    List<Login> users = daoUserRepository.getAllUsers();
+
+                    List<Login> listUsers = daoUserRepository.getAllUsers();
+                    request.setAttribute("allUsers", listUsers);
+
+                    request.setAttribute("msg", msg);
+                    request.setAttribute("allUsers", users);
+                    request.getRequestDispatcher("main/create-user.jsp").forward(request, response);
+
 
                 }
             } else {
