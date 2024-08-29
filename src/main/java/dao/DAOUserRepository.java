@@ -129,6 +129,7 @@ public class DAOUserRepository {
             user.setEmail(result.getString("email"));
             user.setLogin(result.getString("login"));
             user.setPassword(result.getString("password"));
+            user.setIsAdmin(result.getBoolean("useradmin"));
         }
 
         return user;
@@ -182,7 +183,6 @@ public class DAOUserRepository {
 
         result.next();
         return result.getBoolean("exists");
-
 
     }
 

@@ -9,6 +9,7 @@ public class Login implements Serializable {
     private String email;
     private String login;
     private String password;
+    private boolean isAdmin;
 
     public boolean isNew() {
         if (this.id == null) {
@@ -56,9 +57,11 @@ public class Login implements Serializable {
         return password;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
+    public void setPassword(String password) { this.password = password; }
+
+    public boolean getIsAdmin() { return isAdmin; }
+
+    public void setIsAdmin(boolean admin) { isAdmin = admin; }
 }
 
 

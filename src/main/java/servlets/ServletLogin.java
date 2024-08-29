@@ -1,6 +1,7 @@
 package servlets;
 
 import dao.DAOLoginRepository;
+import dao.DAOUserRepository;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -14,7 +15,8 @@ import java.io.IOException;
 @WebServlet(urlPatterns = {"/ServletLogin", "/main/ServletLogin"})
 public class ServletLogin extends HttpServlet {
 
-    private DAOLoginRepository daoLoginRepositoty = new DAOLoginRepository();
+    private final DAOLoginRepository daoLoginRepositoty = new DAOLoginRepository();
+    private final DAOUserRepository userRepository = new DAOUserRepository();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -47,6 +49,7 @@ public class ServletLogin extends HttpServlet {
                 if (daoLoginRepositoty.validateAuthentication(userLogin)) {
 
                     request.getSession().setAttribute("user", userLogin.getLogin());
+                    request.getSession().setAttribute("isAdmin", userRepository.searchUserLoggedByLogin(login).getIsAdmin());
 
                     if (url == null || url.equals("null")) {
                         url = "/main/main.jsp";
