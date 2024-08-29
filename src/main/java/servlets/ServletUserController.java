@@ -5,7 +5,6 @@ import dao.DAOUserRepository;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import model.Login;
@@ -14,7 +13,7 @@ import java.io.IOException;
 import java.util.List;
 
 @WebServlet("/ServletUserController")
-public class ServletUserController extends HttpServlet {
+public class ServletUserController extends ServletGenericUtil {
 
     String msg = "Operação realizada com sucesso!";
 
@@ -39,7 +38,7 @@ public class ServletUserController extends HttpServlet {
                     msg = "Usuário deletado com sucesso!";
                     request.setAttribute("msg", msg);
 
-                    List<Login> listUsers = daoUserRepository.getAllUsers();
+                    List<Login> listUsers = daoUserRepository.getAllUsers(super.getIdLoggedUser(request));
                     request.setAttribute("allUsers", listUsers);
 
                     request.getRequestDispatcher("main/create-user.jsp").forward(request, response);
@@ -48,7 +47,7 @@ public class ServletUserController extends HttpServlet {
                 } else if (action.equalsIgnoreCase("searchUserAjax")) {
                     String name = request.getParameter("name");
 
-                    List<Login> users = daoUserRepository.searchUsersByName(name);
+                    List<Login> users = daoUserRepository.searchUsersByName(name, super.getIdLoggedUser(request));
 
                     ObjectMapper mapper = new ObjectMapper();
                     String json = mapper.writeValueAsString(users);
@@ -64,7 +63,7 @@ public class ServletUserController extends HttpServlet {
 
                     Login user = daoUserRepository.searchUserById(id);
 
-                    List<Login> listUsers = daoUserRepository.getAllUsers();
+                    List<Login> listUsers = daoUserRepository.getAllUsers(super.getIdLoggedUser(request));
                     request.setAttribute("allUsers", listUsers);
 
                     request.setAttribute("msg", msg);
@@ -73,18 +72,19 @@ public class ServletUserController extends HttpServlet {
 
                     return;
 
-                }
-                else if (action.equalsIgnoreCase("getUsers")) {
+                } else if (action.equalsIgnoreCase("getUsers")) {
 
-                    List<Login> users = daoUserRepository.getAllUsers();
+                    List<Login> users = daoUserRepository.getAllUsers(super.getIdLoggedUser(request));
 
-                    List<Login> listUsers = daoUserRepository.getAllUsers();
+                    List<Login> listUsers = daoUserRepository.getAllUsers(super.getIdLoggedUser(request));
                     request.setAttribute("allUsers", listUsers);
 
                     request.setAttribute("msg", msg);
                     request.setAttribute("allUsers", users);
                     request.getRequestDispatcher("main/create-user.jsp").forward(request, response);
 
+
+                    System.out.println(super.getIdLoggedUser(request));
 
                 }
             } else {
@@ -127,11 +127,14 @@ public class ServletUserController extends HttpServlet {
                 } else {
                     msg = "Usuário atualizado com sucesso!";
                 }
-                user = daoUserRepository.saveUser(user);
+                user = daoUserRepository.saveUser(user, super.getIdLoggedUser(request));
             }
 
+            List<Login> listUsers = daoUserRepository.getAllUsers(super.getIdLoggedUser(request));
+            request.setAttribute("allUsers", listUsers);
             request.setAttribute("msg", msg);
             request.setAttribute("dataLogin", user);
+
             request.getRequestDispatcher("main/create-user.jsp").forward(request, response);
 
         } catch (Exception e) {
