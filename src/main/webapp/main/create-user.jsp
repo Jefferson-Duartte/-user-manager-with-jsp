@@ -88,6 +88,12 @@
                                                                 <option <c:if test="${dataLogin.profile == 'SECRETARIO'}">selected</c:if> value="SECRETARIO">Secretário(a)</option>
                                                             </select>
                                                         </div>
+                                                        <div class="form-group form-default">
+                                                            <input <c:if test="${dataLogin.gender == 'Masculino'}">checked</c:if> type="radio"  value="Masculino" id="masculino" name="gender" required>
+                                                            <label for="masculino" >Masculino</label>
+                                                            <input <c:if test="${dataLogin.gender == 'Feminino'}">checked</c:if> type="radio" value="Feminino" id="feminino" name="gender" required>
+                                                            <label for="feminino" >Feminino</label>
+                                                        </div>
                                                         <button onclick=cleanForm() type="button"
                                                                 class="btn btn-primary waves-effect waves-light">
                                                             Novo
@@ -128,6 +134,7 @@
                                                                 <th scope="col">Nome</th>
                                                                 <th scope="col">Email</th>
                                                                 <th scope="col">Perfil</th>
+                                                                <th scope="col">Genêro</th>
                                                                 <th scope="col">Visualizar</th>
                                                             </tr>
                                                             </thead>
@@ -139,6 +146,7 @@
                                                                     <td><c:out value="${user.name}"/></td>
                                                                     <td><c:out value="${user.email}"/></td>
                                                                     <td><c:out value="${user.profile}"/></td>
+                                                                    <td><c:out value="${user.gender}"/></td>
                                                                     <td>
                                                                         <a href="<%=request.getContextPath()%>/ServletUserController?urlAction=editSearch&id=${user.id}"
                                                                            class="btn btn-info">Ver</a></td>

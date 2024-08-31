@@ -10,6 +10,7 @@ public class Login implements Serializable {
     private String login;
     private String password;
     private String profile;
+    private String gender;
 
     public boolean isNew() {
         if (this.id == null) {
@@ -67,6 +68,14 @@ public class Login implements Serializable {
 
     public void setProfile(String profile) {
         this.profile = profile;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
     }
 }
 

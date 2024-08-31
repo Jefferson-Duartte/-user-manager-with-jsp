@@ -109,6 +109,9 @@ public class ServletUserController extends ServletGenericUtil {
             String login = request.getParameter("login");
             String password = request.getParameter("password");
             String profile = request.getParameter("profile");
+            String gender = request.getParameter("gender");
+
+            System.out.println(gender);
 
             Login user = new Login();
             user.setId(id != null && !id.isEmpty() ? Long.parseLong(id) : null);
@@ -117,6 +120,7 @@ public class ServletUserController extends ServletGenericUtil {
             user.setLogin(login);
             user.setPassword(password);
             user.setProfile(profile);
+            user.setGender(gender);
 
             if (daoUserRepository.validateLogin(user.getLogin()) && user.getId() == null) {
                 msg = "Já existe um usuário com o mesmo login.";

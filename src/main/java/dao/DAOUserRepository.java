@@ -21,7 +21,7 @@ public class DAOUserRepository {
     public Login saveUser(Login user, Long idUserLogged) throws Exception {
 
         if (user.isNew()) {
-            String sql = "INSERT INTO public.tb_login(login, password, name, email, user_id, profile) VALUES (?, ?, ?, ?, ?, ?);";
+            String sql = "INSERT INTO public.tb_login(login, password, name, email, user_id, profile, gender) VALUES (?, ?, ?, ?, ?, ?, ?);";
             PreparedStatement statement = connection.prepareStatement(sql);
 
             statement.setString(1, user.getLogin());
@@ -30,12 +30,13 @@ public class DAOUserRepository {
             statement.setString(4, user.getEmail());
             statement.setLong(5, idUserLogged);
             statement.setString(6, user.getProfile());
+            statement.setString(7, user.getGender());
 
             statement.execute();
             connection.commit();
 
         } else {
-            String sql = "UPDATE public.tb_login SET login=?, password=?, name=?, email=?, profile=? WHERE id = ?";
+            String sql = "UPDATE public.tb_login SET login=?, password=?, name=?, email=?, profile=?, gender=? WHERE id = ?";
 
             PreparedStatement statement = connection.prepareStatement(sql);
 
@@ -44,7 +45,8 @@ public class DAOUserRepository {
             statement.setString(3, user.getName());
             statement.setString(4, user.getEmail());
             statement.setString(5, user.getProfile());
-            statement.setLong(6, user.getId());
+            statement.setString(6, user.getGender());
+            statement.setLong(7, user.getId());
 
             statement.executeUpdate();
             connection.commit();
@@ -72,6 +74,7 @@ public class DAOUserRepository {
             user.setEmail(result.getString("email"));
             user.setLogin(result.getString("login"));
             user.setProfile(result.getString("profile"));
+            user.setGender(result.getString("gender"));
             users.add(user);
         }
 
@@ -96,6 +99,7 @@ public class DAOUserRepository {
             user.setEmail(result.getString("email"));
             user.setLogin(result.getString("login"));
             user.setProfile(result.getString("profile"));
+            user.setGender(result.getString("gender"));
             users.add(user);
         }
 
@@ -139,6 +143,7 @@ public class DAOUserRepository {
             user.setLogin(result.getString("login"));
             user.setPassword(result.getString("password"));
             user.setProfile(result.getString("profile"));
+            user.setGender(result.getString("gender"));
         }
 
         return user;
@@ -161,6 +166,7 @@ public class DAOUserRepository {
             user.setLogin(result.getString("login"));
             user.setPassword(result.getString("password"));
             user.setProfile(result.getString("profile"));
+            user.setGender(result.getString("gender"));
         }
 
         return user;
@@ -183,6 +189,7 @@ public class DAOUserRepository {
             user.setLogin(result.getString("login"));
             user.setPassword(result.getString("password"));
             user.setProfile(result.getString("profile"));
+            user.setGender(result.getString("gender"));
         }
 
         return user;
