@@ -21,7 +21,7 @@ public class DAOUserRepository {
     public Login saveUser(Login user, Long idUserLogged) throws Exception {
 
         if (user.isNew()) {
-            String sql = "INSERT INTO public.tb_login(login, password, name, email, user_id) VALUES (?, ?, ?, ?, ?);";
+            String sql = "INSERT INTO public.tb_login(login, password, name, email, user_id, profile) VALUES (?, ?, ?, ?, ?, ?);";
             PreparedStatement statement = connection.prepareStatement(sql);
 
             statement.setString(1, user.getLogin());
@@ -29,12 +29,13 @@ public class DAOUserRepository {
             statement.setString(3, user.getName());
             statement.setString(4, user.getEmail());
             statement.setLong(5, idUserLogged);
+            statement.setString(6, user.getProfile());
 
             statement.execute();
             connection.commit();
 
         } else {
-            String sql = "UPDATE public.tb_login SET login=?, password=?, name=?, email=? WHERE id = " + user.getId();
+            String sql = "UPDATE public.tb_login SET login=?, password=?, name=?, email=?, profile=? WHERE id = ?";
 
             PreparedStatement statement = connection.prepareStatement(sql);
 
@@ -42,6 +43,8 @@ public class DAOUserRepository {
             statement.setString(2, user.getPassword());
             statement.setString(3, user.getName());
             statement.setString(4, user.getEmail());
+            statement.setString(5, user.getProfile());
+            statement.setLong(6, user.getId());
 
             statement.executeUpdate();
             connection.commit();
@@ -55,10 +58,11 @@ public class DAOUserRepository {
 
         List<Login> users = new ArrayList<>();
 
-        String sql = "SELECT * FROM tb_login WHERE upper(name) like upper(?) and useradmin is false and user_id = " + idUserLogged;
+        String sql = "SELECT * FROM tb_login WHERE upper(name) LIKE upper(?) AND (profile != 'ADMINISTRADOR' OR profile IS NULL) AND user_id = ?";
 
         PreparedStatement statement = connection.prepareStatement(sql);
         statement.setString(1, "%" + name + "%");
+        statement.setLong(2, idUserLogged);
         ResultSet result = statement.executeQuery();
 
         while (result.next()) {
@@ -67,6 +71,7 @@ public class DAOUserRepository {
             user.setName(result.getString("name"));
             user.setEmail(result.getString("email"));
             user.setLogin(result.getString("login"));
+            user.setProfile(result.getString("profile"));
             users.add(user);
         }
 
@@ -78,9 +83,10 @@ public class DAOUserRepository {
 
         List<Login> users = new ArrayList<>();
 
-        String sql = "SELECT * FROM tb_login where useradmin is false and user_id = " + idUserLogged;
+        String sql = "SELECT * FROM tb_login WHERE (profile != 'ADMINISTRADOR' OR profile IS NULL) AND user_id = ?";
 
         PreparedStatement statement = connection.prepareStatement(sql);
+        statement.setLong(1, idUserLogged);
         ResultSet result = statement.executeQuery();
 
         while (result.next()) {
@@ -89,6 +95,7 @@ public class DAOUserRepository {
             user.setName(result.getString("name"));
             user.setEmail(result.getString("email"));
             user.setLogin(result.getString("login"));
+            user.setProfile(result.getString("profile"));
             users.add(user);
         }
 
@@ -98,9 +105,10 @@ public class DAOUserRepository {
 
     public Login searchUserByLogin(String login) throws SQLException {
 
-        String sql = "SELECT * FROM tb_login WHERE upper(login) = upper('" + login + "') and useradmin is false";
+        String sql = "SELECT * FROM tb_login WHERE upper(login) = upper(?) AND (profile != 'ADMINISTRADOR' OR profile IS NULL)";
 
         PreparedStatement statement = connection.prepareStatement(sql);
+        statement.setString(1, login);
         ResultSet result = statement.executeQuery();
 
         Login user = new Login();
@@ -117,9 +125,10 @@ public class DAOUserRepository {
 
     public Login searchUserLoggedByLogin(String login) throws SQLException {
 
-        String sql = "SELECT * FROM tb_login WHERE upper(login) = upper('" + login + "')";
+        String sql = "SELECT * FROM tb_login WHERE upper(login) = upper(?)";
 
         PreparedStatement statement = connection.prepareStatement(sql);
+        statement.setString(1, login);
         ResultSet result = statement.executeQuery();
 
         Login user = new Login();
@@ -129,7 +138,7 @@ public class DAOUserRepository {
             user.setEmail(result.getString("email"));
             user.setLogin(result.getString("login"));
             user.setPassword(result.getString("password"));
-            user.setIsAdmin(result.getBoolean("useradmin"));
+            user.setProfile(result.getString("profile"));
         }
 
         return user;
@@ -137,9 +146,11 @@ public class DAOUserRepository {
 
     public Login searchUserByLogin(String login, Long idLoggedUser) throws SQLException {
 
-        String sql = "SELECT * FROM tb_login WHERE upper(login) = upper('" + login + "') and user_id = " + idLoggedUser;
+        String sql = "SELECT * FROM tb_login WHERE upper(login) = upper(?) AND user_id = ? ";
 
         PreparedStatement statement = connection.prepareStatement(sql);
+        statement.setString(1, login);
+        statement.setLong(2, idLoggedUser);
         ResultSet result = statement.executeQuery();
 
         Login user = new Login();
@@ -149,6 +160,7 @@ public class DAOUserRepository {
             user.setEmail(result.getString("email"));
             user.setLogin(result.getString("login"));
             user.setPassword(result.getString("password"));
+            user.setProfile(result.getString("profile"));
         }
 
         return user;
@@ -157,7 +169,7 @@ public class DAOUserRepository {
 
     public Login searchUserById(Long userId) throws SQLException {
 
-        String sql = "SELECT * FROM tb_login  WHERE id = ? and useradmin is false";
+        String sql = "SELECT * FROM tb_login  WHERE id = ? AND (profile != 'ADMINISTRADOR' OR profile IS NULL) ";
 
         PreparedStatement statement = connection.prepareStatement(sql);
         statement.setLong(1, userId);
@@ -170,6 +182,7 @@ public class DAOUserRepository {
             user.setEmail(result.getString("email"));
             user.setLogin(result.getString("login"));
             user.setPassword(result.getString("password"));
+            user.setProfile(result.getString("profile"));
         }
 
         return user;
@@ -177,8 +190,9 @@ public class DAOUserRepository {
 
     public boolean validateLogin(String login) throws Exception {
 
-        String sql = "select count(1) > 0 as exists from tb_login where upper(login) = upper('" + login + "')";
+        String sql = "SELECT count(1) > 0 AS EXISTS FROM tb_login WHERE UPPER(login) = UPPER(?)";
         PreparedStatement statement = connection.prepareStatement(sql);
+        statement.setString(1, login);
         ResultSet result = statement.executeQuery();
 
         result.next();
@@ -188,7 +202,7 @@ public class DAOUserRepository {
 
     public void deleteUser(Long userId) throws Exception {
 
-        String sql = "DELETE FROM tb_login WHERE id = ? and useradmin is false";
+        String sql = "DELETE FROM tb_login WHERE id = ? AND (profile != 'ADMINISTRADOR' OR profile IS NULL)";
 
         PreparedStatement statement = connection.prepareStatement(sql);
         statement.setLong(1, userId);
