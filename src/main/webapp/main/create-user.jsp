@@ -1,3 +1,4 @@
+<%@ page import="model.Login" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
@@ -25,14 +26,10 @@
             <div class="pcoded-wrapper">
                 <jsp:include page="left-bar.jsp"/>
                 <div class="pcoded-content">
-                    <!-- Page-header start -->
                     <jsp:include page="page-header.jsp"/>
-                    <!-- Page-header end -->
                     <div class="pcoded-inner-content">
-                        <!-- Main-body start -->
                         <div class="main-body">
                             <div class="page-wrapper">
-                                <!-- Page-body start -->
                                 <div class="page-body">
                                     <div class="row">
                                         <div class="col-md-12">
@@ -47,6 +44,7 @@
                                                           method="post">
                                                         <input type="hidden" name="urlAction" id="urlAction"
                                                                value=""/>
+
                                                         <div class="form-group form-default form-static-label">
                                                             <input type="text" name="id" class="form-control" readonly
                                                                    value="${dataLogin.id}">
@@ -66,6 +64,7 @@
                                                             <span class="form-bar"></span>
                                                             <label class="float-label">E-mail</label>
                                                         </div>
+
                                                         <div class="form-group form-default">
                                                             <input type="text" name="login"
                                                                    class="form-control" required
@@ -79,6 +78,15 @@
                                                                    value="${dataLogin.password}">
                                                             <span class="form-bar"></span>
                                                             <label class="float-label">Senha</label>
+
+                                                        </div>
+                                                        <div class="form-group form-default form-static-label">
+                                                            <select class="form-select" name="profile" id="select" required>
+                                                                <option selected disabled value="">Selecionar o perfil</option>
+                                                                <option <c:if test="${dataLogin.profile == 'ADMINISTRADOR'}">selected</c:if> value="ADMINISTRADOR">Administrador(a)</option>
+                                                                <option <c:if test="${dataLogin.profile == 'AUXILIAR'}">selected</c:if> value="AUXILIAR">Auxiliar</option>
+                                                                <option <c:if test="${dataLogin.profile == 'SECRETARIO'}">selected</c:if> value="SECRETARIO">Secretário(a)</option>
+                                                            </select>
                                                         </div>
                                                         <button onclick=cleanForm() type="button"
                                                                 class="btn btn-primary waves-effect waves-light">
@@ -119,6 +127,7 @@
                                                                 <th scope="col">ID</th>
                                                                 <th scope="col">Nome</th>
                                                                 <th scope="col">Email</th>
+                                                                <th scope="col">Perfil</th>
                                                                 <th scope="col">Visualizar</th>
                                                             </tr>
                                                             </thead>
@@ -129,8 +138,10 @@
                                                                     <td><c:out value="${user.id}"/></td>
                                                                     <td><c:out value="${user.name}"/></td>
                                                                     <td><c:out value="${user.email}"/></td>
-                                                                    <td><c:out value="${user.email}"/></td>
-                                                                    <td><a href="<%=request.getContextPath()%>/ServletUserController?urlAction=editSearch&id=${user.id}"  class="btn btn-info">Ver</a></td>
+                                                                    <td><c:out value="${user.profile}"/></td>
+                                                                    <td>
+                                                                        <a href="<%=request.getContextPath()%>/ServletUserController?urlAction=editSearch&id=${user.id}"
+                                                                           class="btn btn-info">Ver</a></td>
                                                                 </tr>
                                                             </c:forEach>
                                                             </tbody>
@@ -253,8 +264,11 @@
                         let elements = document.getElementById("create_user_form").elements;
                         document.getElementById("msg").style.display = "none";
                         for (let i = 0; i < elements.length; i++) {
-                            elements[i].value = "";
+                            if (elements[i].type !== "hidden") {
+                                elements[i].value = "";
+                            }
                         }
+                        document.getElementById("select").selectedIndex = 0;
                     }
 
                 </script>

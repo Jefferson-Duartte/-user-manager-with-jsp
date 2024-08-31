@@ -131,7 +131,7 @@
         </ul>
         <div class="pcoded-navigation-label" data-i18n="nav.category.forms">Gerenc. de Usuários</div>
         <ul class="pcoded-item pcoded-left-item">
-            <c:if test= "${isAdmin}">
+            <c:if test= "${profile == 'ADMINISTRADOR'}">
             <li>
                 <a href="<%=request.getContextPath()%>/ServletUserController?urlAction=getUsers" class="waves-effect waves-dark">
                     <span class="pcoded-micon"><i class="ti-plus"></i><b>FC</b></span>

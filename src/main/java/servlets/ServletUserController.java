@@ -83,9 +83,6 @@ public class ServletUserController extends ServletGenericUtil {
                     request.setAttribute("allUsers", users);
                     request.getRequestDispatcher("main/create-user.jsp").forward(request, response);
 
-
-                    System.out.println(super.getIdLoggedUser(request));
-
                 }
             } else {
                 request.getRequestDispatcher("main/create-user.jsp").forward(request, response);
@@ -111,6 +108,7 @@ public class ServletUserController extends ServletGenericUtil {
             String email = request.getParameter("email");
             String login = request.getParameter("login");
             String password = request.getParameter("password");
+            String profile = request.getParameter("profile");
 
             Login user = new Login();
             user.setId(id != null && !id.isEmpty() ? Long.parseLong(id) : null);
@@ -118,6 +116,7 @@ public class ServletUserController extends ServletGenericUtil {
             user.setEmail(email);
             user.setLogin(login);
             user.setPassword(password);
+            user.setProfile(profile);
 
             if (daoUserRepository.validateLogin(user.getLogin()) && user.getId() == null) {
                 msg = "Já existe um usuário com o mesmo login.";
