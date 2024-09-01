@@ -35,6 +35,19 @@ public class DAOUserRepository {
             statement.execute();
             connection.commit();
 
+            if(user.getPhotoUser() != null && !user.getPhotoUser().isEmpty()){
+                sql = "UPDATE tb_login set profile_image_url = ?, profile_image_extension = ? WHERE login = ?";
+                statement = connection.prepareStatement(sql);
+
+                statement.setString(1, user.getPhotoUser());
+                statement.setString(2, user.getPhotoUserExtension());
+                statement.setString(3, user.getLogin());
+
+                statement.execute();
+                connection.commit();
+
+            }
+
         } else {
             String sql = "UPDATE public.tb_login SET login=?, password=?, name=?, email=?, profile=?, gender=? WHERE id = ?";
 
@@ -50,6 +63,20 @@ public class DAOUserRepository {
 
             statement.executeUpdate();
             connection.commit();
+
+
+            if(user.getPhotoUser() != null && !user.getPhotoUser().isEmpty()){
+                sql = "UPDATE tb_login set profile_image_url = ?, profile_image_extension = ? WHERE id = ?";
+                statement = connection.prepareStatement(sql);
+
+                statement.setString(1, user.getPhotoUser());
+                statement.setString(2, user.getPhotoUserExtension());
+                statement.setLong(3, user.getId());
+
+                statement.executeUpdate();
+                connection.commit();
+
+            }
 
         }
 
@@ -144,6 +171,7 @@ public class DAOUserRepository {
             user.setPassword(result.getString("password"));
             user.setProfile(result.getString("profile"));
             user.setGender(result.getString("gender"));
+            user.setPhotoUser(result.getString("profile_image_url"));
         }
 
         return user;
@@ -167,6 +195,7 @@ public class DAOUserRepository {
             user.setPassword(result.getString("password"));
             user.setProfile(result.getString("profile"));
             user.setGender(result.getString("gender"));
+            user.setPhotoUser(result.getString("profile_image_url"));
         }
 
         return user;
@@ -190,6 +219,8 @@ public class DAOUserRepository {
             user.setPassword(result.getString("password"));
             user.setProfile(result.getString("profile"));
             user.setGender(result.getString("gender"));
+            user.setPhotoUser(result.getString("profile_image_url"));
+            user.setPhotoUserExtension(result.getString("profile_image_extension"));
         }
 
         return user;

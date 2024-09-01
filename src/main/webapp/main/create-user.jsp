@@ -39,7 +39,7 @@
                                                 </div>
 
                                                 <div class="card-block">
-                                                    <form class="form-material" id="create_user_form"
+                                                    <form enctype="multipart/form-data" class="form-material" id="create_user_form"
                                                           action="<%=request.getContextPath()%>/ServletUserController"
                                                           method="post">
                                                         <input type="hidden" name="urlAction" id="urlAction"
@@ -50,6 +50,17 @@
                                                                    value="${dataLogin.id}">
                                                             <span class="form-bar"></span>
                                                             <label class="float-label">ID</label>
+                                                        </div>
+                                                        <div class="form-group" style="display: flex; flex-direction: column; gap: 5px">
+                                                            <label style="display: block;" for="img-file">Foto de perfil:</label>
+                                                            <c:if test="${dataLogin.photoUser != null && dataLogin.photoUser != ''}">
+                                                                <img id="image-user" src="${dataLogin.photoUser}" width="70px">
+                                                            </c:if>
+                                                            <c:if test="${dataLogin.photoUser == null || dataLogin.photoUser == ''}">
+                                                                <img id="image-user" src="assets/images/user-default.png" width="70px">
+                                                            </c:if>
+
+                                                            <input id="img-file" name="filePhoto" accept="image/*" onchange="changeImage('image-user', 'img-file')" type="file" class="form-control-file">
                                                         </div>
                                                         <div class="form-group form-default">
                                                             <input type="text" name="name" class="form-control" required
@@ -81,37 +92,68 @@
 
                                                         </div>
                                                         <div class="form-group form-default form-static-label">
-                                                            <select class="form-select" name="profile" id="select" required>
-                                                                <option selected disabled value="">Selecionar o perfil</option>
-                                                                <option <c:if test="${dataLogin.profile == 'ADMINISTRADOR'}">selected</c:if> value="ADMINISTRADOR">Administrador(a)</option>
-                                                                <option <c:if test="${dataLogin.profile == 'AUXILIAR'}">selected</c:if> value="AUXILIAR">Auxiliar</option>
-                                                                <option <c:if test="${dataLogin.profile == 'SECRETARIO'}">selected</c:if> value="SECRETARIO">Secretário(a)</option>
+                                                            <select class="form-select" name="profile" id="select"
+                                                                    required>
+                                                                <option selected disabled value="">Selecione um perfil
+                                                                </option>
+                                                                <option
+                                                                        <c:if test="${dataLogin.profile == 'ADMINISTRADOR'}">selected</c:if>
+                                                                        value="ADMINISTRADOR">Administrador(a)
+                                                                </option>
+                                                                <option
+                                                                        <c:if test="${dataLogin.profile == 'AUXILIAR'}">selected</c:if>
+                                                                        value="AUXILIAR">Auxiliar
+                                                                </option>
+                                                                <option
+                                                                        <c:if test="${dataLogin.profile == 'SECRETARIO'}">selected</c:if>
+                                                                        value="SECRETARIO">Secretário(a)
+                                                                </option>
                                                             </select>
                                                         </div>
-                                                        <div class="form-group form-default">
-                                                            <input <c:if test="${dataLogin.gender == 'Masculino'}">checked</c:if> type="radio"  value="Masculino" id="masculino" name="gender" required>
-                                                            <label for="masculino" >Masculino</label>
-                                                            <input <c:if test="${dataLogin.gender == 'Feminino'}">checked</c:if> type="radio" value="Feminino" id="feminino" name="gender" required>
-                                                            <label for="feminino" >Feminino</label>
+                                                        <div class="form-group form-default form-static-label">
+                                                            <label>Sexo:</label>
+                                                        <div class="form-check" style="display: flex; gap: 60px">
+                                                            <div>
+                                                                <input <c:if test="${dataLogin.gender == 'Masculino'}">checked</c:if>
+                                                                        class="form-check-input" type="radio"
+                                                                        name="gender" id="masculino" required checked value="Masculino">
+                                                                <label class="form-check-label" style="padding-left: 0" for="masculino">
+                                                                    Masculino
+                                                                </label>
+                                                            </div>
+
+                                                            <div>
+                                                                <input
+                                                                        <c:if test="${dataLogin.gender == 'Feminino'}">checked</c:if>
+                                                                        class="form-check-input" type="radio"
+                                                                        name="gender" id="feminino" value="Feminino">
+                                                                <label class="form-check-label" style="padding-left: 0" for="feminino">
+                                                                    Feminino
+                                                                </label>
+                                                            </div>
+
+                                                            </div>
                                                         </div>
-                                                        <button onclick=cleanForm() type="button"
-                                                                class="btn btn-primary waves-effect waves-light">
-                                                            Novo
-                                                        </button>
-                                                        <button type="submit"
-                                                                class="btn btn-success waves-effect waves-light">
-                                                            Salvar
-                                                        </button>
-                                                        <button class="btn btn-warning waves-effect waves-light">Editar
-                                                        </button>
-                                                        <button type="button" onclick=creteDelete()
-                                                                class="btn btn-danger waves-effect waves-light">Excluir
-                                                        </button>
-                                                        <button type="button" class="btn btn-secondary"
-                                                                data-toggle="modal" data-target="#exampleModal">
-                                                            Pesquisar
-                                                        </button>
-                                                        <%
+                                                            <button onclick=cleanForm() type="button"
+                                                                    class="btn btn-primary waves-effect waves-light">
+                                                                Novo
+                                                            </button>
+                                                            <button type="submit"
+                                                                    class="btn btn-success waves-effect waves-light">
+                                                                Salvar
+                                                            </button>
+                                                            <button class="btn btn-warning waves-effect waves-light">
+                                                                Editar
+                                                            </button>
+                                                            <button type="button" onclick=creteDelete()
+                                                                    class="btn btn-danger waves-effect waves-light">
+                                                                Excluir
+                                                            </button>
+                                                            <button type="button" class="btn btn-secondary"
+                                                                    data-toggle="modal" data-target="#exampleModal">
+                                                                Pesquisar
+                                                            </button>
+                                                                <%
                                                             String msg = (String) request.getAttribute("msg");
                                                             String style = "";
                                                             if (msg == null || msg == "null") {
@@ -121,10 +163,10 @@
 
                                                         %>
 
-                                                        <div class="alert alert-success mt-4 col-md-3  <%=style%>"
-                                                             role="alert" id="msg">
-                                                            <%=msg%>
-                                                        </div>
+                                                            <div class="alert alert-success mt-4 col-md-3  <%=style%>"
+                                                                 role="alert" id="msg">
+                                                                <%=msg%>
+                                                            </div>
                                                     </form>
                                                     <div style="height: 300px; overflow-y: scroll">
                                                         <table class="table" id="table_all_users">
@@ -214,6 +256,24 @@
 
                 <script>
 
+                    function changeImage(imageUser, filePhoto){
+
+                        let imageUserPreview = document.getElementById(imageUser);
+                        let filePhotoInput = document.getElementById(filePhoto).files[0];
+                        let reader = new FileReader();
+
+                        reader.onloadend = function(){
+                            imageUserPreview.src = reader.result
+                        }
+
+                        if(filePhotoInput){
+                            reader.readAsDataURL(filePhotoInput);
+                        }else{
+                            imageUserPreview.src = "";
+                        }
+
+                    }
+
                     function searchUser() {
                         let name = document.getElementById("search").value;
 
@@ -277,6 +337,8 @@
                             }
                         }
                         document.getElementById("select").selectedIndex = 0;
+                        document.getElementById("masculino").checked  = true;
+                        document.getElementById("image-user").src = "assets/images/user-default.png"
                     }
 
                 </script>

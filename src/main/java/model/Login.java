@@ -11,6 +11,8 @@ public class Login implements Serializable {
     private String password;
     private String profile;
     private String gender;
+    private String photoUser;
+    private String photoUserExtension;
 
     public boolean isNew() {
         if (this.id == null) {
@@ -76,6 +78,22 @@ public class Login implements Serializable {
 
     public void setGender(String gender) {
         this.gender = gender;
+    }
+
+    public String getPhotoUser() {
+        return photoUser;
+    }
+
+    public void setPhotoUser(String photoUser) {
+        this.photoUser = photoUser;
+    }
+
+    public String getPhotoUserExtension() {
+        return photoUserExtension;
+    }
+
+    public void setPhotoUserExtension(String photoUserExtension) {
+        this.photoUserExtension = photoUserExtension;
     }
 }
 

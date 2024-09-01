@@ -4,14 +4,20 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import dao.DAOUserRepository;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.Part;
 import model.Login;
+import org.apache.commons.compress.utils.IOUtils;
+import org.apache.tomcat.util.codec.binary.Base64;
+import org.apache.tomcat.util.http.fileupload.servlet.ServletFileUpload;
 
 import java.io.IOException;
 import java.util.List;
 
+@MultipartConfig
 @WebServlet("/ServletUserController")
 public class ServletUserController extends ServletGenericUtil {
 
@@ -111,8 +117,6 @@ public class ServletUserController extends ServletGenericUtil {
             String profile = request.getParameter("profile");
             String gender = request.getParameter("gender");
 
-            System.out.println(gender);
-
             Login user = new Login();
             user.setId(id != null && !id.isEmpty() ? Long.parseLong(id) : null);
             user.setName(name);
@@ -121,6 +125,16 @@ public class ServletUserController extends ServletGenericUtil {
             user.setPassword(password);
             user.setProfile(profile);
             user.setGender(gender);
+
+            if(ServletFileUpload.isMultipartContent(request)){
+                Part part = request.getPart("filePhoto");
+                if (part.getSize() > 0){
+                    byte[] photo = IOUtils.toByteArray(part.getInputStream());
+                    String photoBase64 = "data:" + part.getContentType() + ";base64," + new Base64().encodeBase64String(photo);
+                    user.setPhotoUser(photoBase64);
+                    user.setPhotoUserExtension(part.getContentType().split("\\/")[1]);
+                }
+            }
 
             if (daoUserRepository.validateLogin(user.getLogin()) && user.getId() == null) {
                 msg = "Já existe um usuário com o mesmo login.";
