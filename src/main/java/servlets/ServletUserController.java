@@ -89,6 +89,17 @@ public class ServletUserController extends ServletGenericUtil {
                     request.setAttribute("allUsers", users);
                     request.getRequestDispatcher("main/create-user.jsp").forward(request, response);
 
+                } else if (action.equalsIgnoreCase("downloadUserPhoto")) {
+
+                    String idUser = request.getParameter("id");
+
+                    Login user = daoUserRepository.searchUserById(Long.parseLong(idUser));
+
+                    if(user.getPhotoUser() != null || !user.getPhotoUser().isEmpty()){
+                        response.setHeader("Content-Disposition", "attachment;filename=" + user.getLogin() + "." + user.getPhotoUserExtension());
+                        response.getOutputStream().write(Base64.decodeBase64(user.getPhotoUser().split("\\,")[1]));
+                    }
+
                 }
             } else {
                 request.getRequestDispatcher("main/create-user.jsp").forward(request, response);

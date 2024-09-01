@@ -54,7 +54,9 @@
                                                         <div class="form-group" style="display: flex; flex-direction: column; gap: 5px">
                                                             <label style="display: block;" for="img-file">Foto de perfil:</label>
                                                             <c:if test="${dataLogin.photoUser != null && dataLogin.photoUser != ''}">
-                                                                <img id="image-user" src="${dataLogin.photoUser}" width="70px">
+                                                                <a href="<%=request.getContextPath()%>/ServletUserController?urlAction=downloadUserPhoto&id=${dataLogin.id}">
+                                                                    <img id="image-user" src="${dataLogin.photoUser}" width="70px">
+                                                                </a>
                                                             </c:if>
                                                             <c:if test="${dataLogin.photoUser == null || dataLogin.photoUser == ''}">
                                                                 <img id="image-user" src="assets/images/user-default.png" width="70px">
