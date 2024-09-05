@@ -21,7 +21,7 @@ public class DAOUserRepository {
     public Login saveUser(Login user, Long idUserLogged) throws Exception {
 
         if (user.isNew()) {
-            String sql = "INSERT INTO public.tb_login(login, password, name, email, user_id, profile, gender) VALUES (?, ?, ?, ?, ?, ?, ?);";
+            String sql = "INSERT INTO public.tb_login(login, password, name, email, user_id, profile, gender, zipCode, street, neighborhood, city, state, number) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
             PreparedStatement statement = connection.prepareStatement(sql);
 
             statement.setString(1, user.getLogin());
@@ -31,6 +31,12 @@ public class DAOUserRepository {
             statement.setLong(5, idUserLogged);
             statement.setString(6, user.getProfile());
             statement.setString(7, user.getGender());
+            statement.setString(8, user.getZipCode());
+            statement.setString(9, user.getStreet());
+            statement.setString(10, user.getNeighborhood());
+            statement.setString(11, user.getCity());
+            statement.setString(12, user.getState());
+            statement.setString(13, user.getNumber());
 
             statement.execute();
             connection.commit();
@@ -49,17 +55,11 @@ public class DAOUserRepository {
             }
 
         } else {
-            String sql = "UPDATE public.tb_login SET login=?, password=?, name=?, email=?, profile=?, gender=? WHERE id = ?";
+            String sql = "UPDATE public.tb_login SET login=?, password=?, name=?, email=?, profile=?, gender=?, zipCode=?, street=?, neighborhood=?, city=?, state=?, number=?  WHERE id = ?";
 
             PreparedStatement statement = connection.prepareStatement(sql);
 
-            statement.setString(1, user.getLogin());
-            statement.setString(2, user.getPassword());
-            statement.setString(3, user.getName());
-            statement.setString(4, user.getEmail());
-            statement.setString(5, user.getProfile());
-            statement.setString(6, user.getGender());
-            statement.setLong(7, user.getId());
+            setStatment(statement, user);
 
             statement.executeUpdate();
             connection.commit();
@@ -96,12 +96,7 @@ public class DAOUserRepository {
 
         while (result.next()) {
             Login user = new Login();
-            user.setId(result.getLong("id"));
-            user.setName(result.getString("name"));
-            user.setEmail(result.getString("email"));
-            user.setLogin(result.getString("login"));
-            user.setProfile(result.getString("profile"));
-            user.setGender(result.getString("gender"));
+            setDataUser(user, result);
             users.add(user);
         }
 
@@ -188,14 +183,7 @@ public class DAOUserRepository {
 
         Login user = new Login();
         while (result.next()) {
-            user.setId(result.getLong("id"));
-            user.setName(result.getString("name"));
-            user.setEmail(result.getString("email"));
-            user.setLogin(result.getString("login"));
-            user.setPassword(result.getString("password"));
-            user.setProfile(result.getString("profile"));
-            user.setGender(result.getString("gender"));
-            user.setPhotoUser(result.getString("profile_image_url"));
+            setDataUser(user,result);
         }
 
         return user;
@@ -212,15 +200,7 @@ public class DAOUserRepository {
 
         Login user = new Login();
         while (result.next()) {
-            user.setId(result.getLong("id"));
-            user.setName(result.getString("name"));
-            user.setEmail(result.getString("email"));
-            user.setLogin(result.getString("login"));
-            user.setPassword(result.getString("password"));
-            user.setProfile(result.getString("profile"));
-            user.setGender(result.getString("gender"));
-            user.setPhotoUser(result.getString("profile_image_url"));
-            user.setPhotoUserExtension(result.getString("profile_image_extension"));
+            setDataUser(user, result);
         }
 
         return user;
@@ -247,6 +227,40 @@ public class DAOUserRepository {
 
         statement.execute();
         connection.commit();
+    }
+
+    public void setDataUser(Login user, ResultSet result) throws SQLException {
+        user.setId(result.getLong("id"));
+        user.setName(result.getString("name"));
+        user.setEmail(result.getString("email"));
+        user.setLogin(result.getString("login"));
+        user.setPassword(result.getString("password"));
+        user.setProfile(result.getString("profile"));
+        user.setGender(result.getString("gender"));
+        user.setPhotoUser(result.getString("profile_image_url"));
+        user.setPhotoUserExtension(result.getString("profile_image_extension"));
+        user.setZipCode(result.getString("zipCode"));
+        user.setStreet(result.getString("street"));
+        user.setNeighborhood(result.getString("neighborhood"));
+        user.setCity(result.getString("city"));
+        user.setState(result.getString("state"));
+        user.setNumber(result.getString("number"));
+    }
+
+    public void setStatment(PreparedStatement statement, Login user) throws SQLException {
+        statement.setString(1, user.getLogin());
+        statement.setString(2, user.getPassword());
+        statement.setString(3, user.getName());
+        statement.setString(4, user.getEmail());
+        statement.setString(5, user.getProfile());
+        statement.setString(6, user.getGender());
+        statement.setString(7, user.getZipCode());
+        statement.setString(8, user.getStreet());
+        statement.setString(9, user.getNeighborhood());
+        statement.setString(10, user.getCity());
+        statement.setString(11, user.getState());
+        statement.setString(12, user.getNumber());
+        statement.setLong(13, user.getId());
     }
 
 }

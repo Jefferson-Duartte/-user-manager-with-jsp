@@ -77,7 +77,48 @@
                                                             <span class="form-bar"></span>
                                                             <label class="float-label">E-mail</label>
                                                         </div>
-
+                                                        <div class="form-group form-default">
+                                                            <input type="text" name="zipCode"
+                                                                   class="form-control" required
+                                                                   value="${dataLogin.zipCode}" onblur="searchCEP()" id="zipCode">
+                                                            <span class="form-bar"></span>
+                                                            <label class="float-label">CEP</label>
+                                                        </div>
+                                                        <div class="form-group form-default">
+                                                            <input type="text" name="street"
+                                                                   class="form-control" required
+                                                                   value="${dataLogin.street}" id="street">
+                                                            <span class="form-bar"></span>
+                                                            <label class="float-label">Rua</label>
+                                                        </div>
+                                                        <div class="form-group form-default">
+                                                            <input type="text" name="neighborhood"
+                                                                   class="form-control" required
+                                                                   value="${dataLogin.neighborhood}" id="neighborhood">
+                                                            <span class="form-bar"></span>
+                                                            <label class="float-label">Bairro</label>
+                                                        </div>
+                                                        <div class="form-group form-default">
+                                                            <input type="text" name="city"
+                                                                   class="form-control" required
+                                                                   value="${dataLogin.city}" id="city">
+                                                            <span class="form-bar"></span>
+                                                            <label class="float-label">Cidade</label>
+                                                        </div>
+                                                        <div class="form-group form-default">
+                                                            <input type="text" name="state"
+                                                                   class="form-control" required
+                                                                   value="${dataLogin.state}" id="state">
+                                                            <span class="form-bar"></span>
+                                                            <label class="float-label">Estado</label>
+                                                        </div>
+                                                        <div class="form-group form-default">
+                                                            <input type="text" name="number"
+                                                                   class="form-control" required
+                                                                   value="${dataLogin.number}" id="number">
+                                                            <span class="form-bar"></span>
+                                                            <label class="float-label">Numero</label>
+                                                        </div>
                                                         <div class="form-group form-default">
                                                             <input type="text" name="login"
                                                                    class="form-control" required
@@ -242,8 +283,29 @@
 
                                         </tbody>
                                     </table>
+                                    <nav aria-label="Page navigation example">
+                                        <ul class="pagination">
+                                            <li class="page-item">
+                                                <a class="page-link" href="#" aria-label="Previous">
+                                                    <span aria-hidden="true">&laquo;</span>
+                                                    <span class="sr-only">Previous</span>
+                                                </a>
+                                            </li>
+                                            <li class="page-item"><a class="page-link" href="#">1</a></li>
+                                            <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                            <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                            <li class="page-item">
+                                                <a class="page-link" href="#" aria-label="Next">
+                                                    <span aria-hidden="true">&raquo;</span>
+                                                    <span class="sr-only">Next</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </nav>
                                 </div>
+
                             </div>
+
                             <div class="modal-footer" style="display: flex; justify-content: space-between">
                                 <span id="totalResult"></span>
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
@@ -257,6 +319,23 @@
 
 
                 <script>
+
+                    function searchCEP(){
+
+                        let cep = $("#zipCode").val();
+
+
+                        $.getJSON("https://viacep.com.br/ws/"+ cep +"/json/?callback=?", function(dados) {
+
+                            if (!("erro" in dados)) {
+                                $("zipCode").val(dados.cep)
+                                $("#street").val(dados.logradouro);
+                                $("#neighborhood").val(dados.bairro);
+                                $("#city").val(dados.localidade);
+                                $("#state").val(dados.uf);
+                            }
+                        })
+                    }
 
                     function changeImage(imageUser, filePhoto){
 

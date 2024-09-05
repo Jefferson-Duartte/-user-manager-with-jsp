@@ -127,6 +127,12 @@ public class ServletUserController extends ServletGenericUtil {
             String password = request.getParameter("password");
             String profile = request.getParameter("profile");
             String gender = request.getParameter("gender");
+            String zipCode = request.getParameter("zipCode");
+            String street = request.getParameter("street");
+            String neighborhood = request.getParameter("neighborhood");
+            String city = request.getParameter("city");
+            String state = request.getParameter("state");
+            String number = request.getParameter("number");
 
             Login user = new Login();
             user.setId(id != null && !id.isEmpty() ? Long.parseLong(id) : null);
@@ -136,6 +142,12 @@ public class ServletUserController extends ServletGenericUtil {
             user.setPassword(password);
             user.setProfile(profile);
             user.setGender(gender);
+            user.setZipCode(zipCode);
+            user.setStreet(street);
+            user.setNeighborhood(neighborhood);
+            user.setCity(city);
+            user.setState(state);
+            user.setNumber(number);
 
             if(ServletFileUpload.isMultipartContent(request)){
                 Part part = request.getPart("filePhoto");
