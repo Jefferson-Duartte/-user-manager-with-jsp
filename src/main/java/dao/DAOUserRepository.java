@@ -38,7 +38,7 @@ public class DAOUserRepository {
     public Login saveUser(Login user, Long idUserLogged) throws Exception {
 
         if (user.isNew()) {
-            String sql = "INSERT INTO public.tb_login(login, password, name, email, user_id, profile, gender, zipCode, street, neighborhood, city, state, number) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+            String sql = "INSERT INTO public.tb_login(login, password, name, email, user_id, profile, gender, zipCode, street, neighborhood, city, state, number, phone_number) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
             PreparedStatement statement = connection.prepareStatement(sql);
 
             statement.setString(1, user.getLogin());
@@ -54,6 +54,7 @@ public class DAOUserRepository {
             statement.setString(11, user.getCity());
             statement.setString(12, user.getState());
             statement.setString(13, user.getNumber());
+            statement.setString(14, user.getPhoneNumber());
 
             statement.execute();
             connection.commit();
@@ -163,6 +164,7 @@ public class DAOUserRepository {
             user.setLogin(result.getString("login"));
             user.setProfile(result.getString("profile"));
             user.setGender(result.getString("gender"));
+            user.setPhoneNumber(result.getString("phone_number"));
             users.add(user);
         }
 
@@ -207,7 +209,6 @@ public class DAOUserRepository {
             user.setProfile(result.getString("profile"));
             user.setGender(result.getString("gender"));
             user.setPhotoUser(result.getString("profile_image_url")); // Verifique se este valor está correto
-            System.out.println("Photo User URL in DAO: " + user.getPhotoUser());
         }
 
         return user;
@@ -286,6 +287,7 @@ public class DAOUserRepository {
         user.setCity(result.getString("city"));
         user.setState(result.getString("state"));
         user.setNumber(result.getString("number"));
+        user.setPhoneNumber(result.getString("phone_number"));
     }
 
     public void setStatment(PreparedStatement statement, Login user) throws SQLException {
@@ -302,6 +304,7 @@ public class DAOUserRepository {
         statement.setString(11, user.getState());
         statement.setString(12, user.getNumber());
         statement.setLong(13, user.getId());
+        statement.setString(14, user.getPhoneNumber());
     }
 
 }

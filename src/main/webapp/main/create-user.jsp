@@ -85,6 +85,13 @@
                                                             <label class="float-label">E-mail</label>
                                                         </div>
                                                         <div class="form-group form-default">
+                                                            <input type="text" name="phoneNumber"
+                                                                   class="form-control" required
+                                                                   value="${dataLogin.phoneNumber}">
+                                                            <span class="form-bar"></span>
+                                                            <label class="float-label">Telefone</label>
+                                                        </div>
+                                                        <div class="form-group form-default">
                                                             <input type="text" name="zipCode"
                                                                    class="form-control" required
                                                                    value="${dataLogin.zipCode}" onblur="searchCEP()"
@@ -256,7 +263,7 @@
                                                     </div>
                                                     <nav aria-label="Page navigation example">
                                                         <ul class="pagination">
-                                                            
+
                                                             <c:set var="totalPages"
                                                                    value="${totalPages != null ? totalPages : 0}"/>
 

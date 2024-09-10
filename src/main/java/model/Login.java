@@ -19,6 +19,7 @@ public class Login implements Serializable {
     private String city;
     private String state;
     private String number;
+    private String phoneNumber;
 
 
     public boolean isNew() {
@@ -149,6 +150,14 @@ public class Login implements Serializable {
 
     public void setNumber(String number) {
         this.number = number;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 }
 
