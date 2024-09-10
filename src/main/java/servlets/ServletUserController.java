@@ -46,7 +46,7 @@ public class ServletUserController extends ServletGenericUtil {
 
                     List<Login> listUsers = daoUserRepository.getAllUsers(super.getIdLoggedUser(request));
                     request.setAttribute("allUsers", listUsers);
-
+                    request.setAttribute("totalPages", daoUserRepository.totalPages(this.getIdLoggedUser(request)));
                     request.getRequestDispatcher("main/create-user.jsp").forward(request, response);
 
 
@@ -74,6 +74,20 @@ public class ServletUserController extends ServletGenericUtil {
 
                     request.setAttribute("msg", msg);
                     request.setAttribute("dataLogin", user);
+                    request.setAttribute("totalPages", daoUserRepository.totalPages(this.getIdLoggedUser(request)));
+                    request.getRequestDispatcher("main/create-user.jsp").forward(request, response);
+
+                    return;
+
+                } else if (action.equalsIgnoreCase("paginate")) {
+                    Integer offset = Integer.valueOf(request.getParameter("page"));
+                    List<Login> listUsers = daoUserRepository.getAllUsersPaginated(this.getIdLoggedUser(request), offset);
+//
+//
+                    request.setAttribute("allUsers", listUsers);
+//
+                    request.setAttribute("msg", msg);
+                    request.setAttribute("totalPages", daoUserRepository.totalPages(this.getIdLoggedUser(request)));
                     request.getRequestDispatcher("main/create-user.jsp").forward(request, response);
 
                     return;
@@ -87,6 +101,7 @@ public class ServletUserController extends ServletGenericUtil {
 
                     request.setAttribute("msg", msg);
                     request.setAttribute("allUsers", users);
+                    request.setAttribute("totalPages", daoUserRepository.totalPages(this.getIdLoggedUser(request)));
                     request.getRequestDispatcher("main/create-user.jsp").forward(request, response);
 
                 } else if (action.equalsIgnoreCase("downloadUserPhoto")) {
@@ -95,13 +110,14 @@ public class ServletUserController extends ServletGenericUtil {
 
                     Login user = daoUserRepository.searchUserById(Long.parseLong(idUser));
 
-                    if(user.getPhotoUser() != null || !user.getPhotoUser().isEmpty()){
+                    if (user.getPhotoUser() != null || !user.getPhotoUser().isEmpty()) {
                         response.setHeader("Content-Disposition", "attachment;filename=" + user.getLogin() + "." + user.getPhotoUserExtension());
                         response.getOutputStream().write(Base64.decodeBase64(user.getPhotoUser().split("\\,")[1]));
                     }
 
                 }
             } else {
+                request.setAttribute("totalPages", daoUserRepository.totalPages(this.getIdLoggedUser(request)));
                 request.getRequestDispatcher("main/create-user.jsp").forward(request, response);
             }
 
@@ -149,9 +165,9 @@ public class ServletUserController extends ServletGenericUtil {
             user.setState(state);
             user.setNumber(number);
 
-            if(ServletFileUpload.isMultipartContent(request)){
+            if (ServletFileUpload.isMultipartContent(request)) {
                 Part part = request.getPart("filePhoto");
-                if (part.getSize() > 0){
+                if (part.getSize() > 0) {
                     byte[] photo = IOUtils.toByteArray(part.getInputStream());
                     String photoBase64 = "data:" + part.getContentType() + ";base64," + new Base64().encodeBase64String(photo);
                     user.setPhotoUser(photoBase64);
@@ -174,7 +190,7 @@ public class ServletUserController extends ServletGenericUtil {
             request.setAttribute("allUsers", listUsers);
             request.setAttribute("msg", msg);
             request.setAttribute("dataLogin", user);
-
+            request.setAttribute("totalPages", daoUserRepository.totalPages(this.getIdLoggedUser(request)));
             request.getRequestDispatcher("main/create-user.jsp").forward(request, response);
 
         } catch (Exception e) {

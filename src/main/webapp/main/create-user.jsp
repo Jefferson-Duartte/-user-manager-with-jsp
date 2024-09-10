@@ -39,7 +39,8 @@
                                                 </div>
 
                                                 <div class="card-block">
-                                                    <form enctype="multipart/form-data" class="form-material" id="create_user_form"
+                                                    <form enctype="multipart/form-data" class="form-material"
+                                                          id="create_user_form"
                                                           action="<%=request.getContextPath()%>/ServletUserController"
                                                           method="post">
                                                         <input type="hidden" name="urlAction" id="urlAction"
@@ -51,18 +52,24 @@
                                                             <span class="form-bar"></span>
                                                             <label class="float-label">ID</label>
                                                         </div>
-                                                        <div class="form-group" style="display: flex; flex-direction: column; gap: 5px">
-                                                            <label style="display: block;" for="img-file">Foto de perfil:</label>
+                                                        <div class="form-group"
+                                                             style="display: flex; flex-direction: column; gap: 5px">
+                                                            <label style="display: block;" for="img-file">Foto de
+                                                                perfil:</label>
                                                             <c:if test="${dataLogin.photoUser != null && dataLogin.photoUser != ''}">
                                                                 <a href="<%=request.getContextPath()%>/ServletUserController?urlAction=downloadUserPhoto&id=${dataLogin.id}">
-                                                                    <img id="image-user" src="${dataLogin.photoUser}" width="70px">
+                                                                    <img id="image-user" src="${dataLogin.photoUser}"
+                                                                         width="70px">
                                                                 </a>
                                                             </c:if>
                                                             <c:if test="${dataLogin.photoUser == null || dataLogin.photoUser == ''}">
-                                                                <img id="image-user" src="assets/images/user-default.png" width="70px">
+                                                                <img id="image-user"
+                                                                     src="assets/images/user-default.png" width="70px">
                                                             </c:if>
 
-                                                            <input id="img-file" name="filePhoto" accept="image/*" onchange="changeImage('image-user', 'img-file')" type="file" class="form-control-file">
+                                                            <input id="img-file" name="filePhoto" accept="image/*"
+                                                                   onchange="changeImage('image-user', 'img-file')"
+                                                                   type="file" class="form-control-file">
                                                         </div>
                                                         <div class="form-group form-default">
                                                             <input type="text" name="name" class="form-control" required
@@ -80,7 +87,8 @@
                                                         <div class="form-group form-default">
                                                             <input type="text" name="zipCode"
                                                                    class="form-control" required
-                                                                   value="${dataLogin.zipCode}" onblur="searchCEP()" id="zipCode">
+                                                                   value="${dataLogin.zipCode}" onblur="searchCEP()"
+                                                                   id="zipCode">
                                                             <span class="form-bar"></span>
                                                             <label class="float-label">CEP</label>
                                                         </div>
@@ -155,48 +163,53 @@
                                                         </div>
                                                         <div class="form-group form-default form-static-label">
                                                             <label>Sexo:</label>
-                                                        <div class="form-check" style="display: flex; gap: 60px">
-                                                            <div>
-                                                                <input <c:if test="${dataLogin.gender == 'Masculino'}">checked</c:if>
-                                                                        class="form-check-input" type="radio"
-                                                                        name="gender" id="masculino" required checked value="Masculino">
-                                                                <label class="form-check-label" style="padding-left: 0" for="masculino">
-                                                                    Masculino
-                                                                </label>
-                                                            </div>
+                                                            <div class="form-check" style="display: flex; gap: 60px">
+                                                                <div>
+                                                                    <input
+                                                                            <c:if test="${dataLogin.gender == 'Masculino'}">checked</c:if>
+                                                                            class="form-check-input" type="radio"
+                                                                            name="gender" id="masculino" required
+                                                                            value="Masculino">
+                                                                    <label class="form-check-label"
+                                                                           style="padding-left: 0" for="masculino">
+                                                                        Masculino
+                                                                    </label>
+                                                                </div>
 
-                                                            <div>
-                                                                <input
-                                                                        <c:if test="${dataLogin.gender == 'Feminino'}">checked</c:if>
-                                                                        class="form-check-input" type="radio"
-                                                                        name="gender" id="feminino" value="Feminino">
-                                                                <label class="form-check-label" style="padding-left: 0" for="feminino">
-                                                                    Feminino
-                                                                </label>
-                                                            </div>
+                                                                <div>
+                                                                    <input
+                                                                            <c:if test="${dataLogin.gender == 'Feminino'}">checked</c:if>
+                                                                            class="form-check-input" type="radio"
+                                                                            name="gender" id="feminino"
+                                                                            value="Feminino" required>
+                                                                    <label class="form-check-label"
+                                                                           style="padding-left: 0" for="feminino">
+                                                                        Feminino
+                                                                    </label>
+                                                                </div>
 
                                                             </div>
                                                         </div>
-                                                            <button onclick=cleanForm() type="button"
-                                                                    class="btn btn-primary waves-effect waves-light">
-                                                                Novo
-                                                            </button>
-                                                            <button type="submit"
-                                                                    class="btn btn-success waves-effect waves-light">
-                                                                Salvar
-                                                            </button>
-                                                            <button class="btn btn-warning waves-effect waves-light">
-                                                                Editar
-                                                            </button>
-                                                            <button type="button" onclick=creteDelete()
-                                                                    class="btn btn-danger waves-effect waves-light">
-                                                                Excluir
-                                                            </button>
-                                                            <button type="button" class="btn btn-secondary"
-                                                                    data-toggle="modal" data-target="#exampleModal">
-                                                                Pesquisar
-                                                            </button>
-                                                                <%
+                                                        <button onclick=cleanForm() type="button"
+                                                                class="btn btn-primary waves-effect waves-light">
+                                                            Novo
+                                                        </button>
+                                                        <button type="submit"
+                                                                class="btn btn-success waves-effect waves-light">
+                                                            Salvar
+                                                        </button>
+                                                        <button class="btn btn-warning waves-effect waves-light">
+                                                            Editar
+                                                        </button>
+                                                        <button type="button" onclick=creteDelete()
+                                                                class="btn btn-danger waves-effect waves-light">
+                                                            Excluir
+                                                        </button>
+                                                        <button type="button" class="btn btn-secondary"
+                                                                data-toggle="modal" data-target="#exampleModal">
+                                                            Pesquisar
+                                                        </button>
+                                                        <%
                                                             String msg = (String) request.getAttribute("msg");
                                                             String style = "";
                                                             if (msg == null || msg == "null") {
@@ -206,10 +219,10 @@
 
                                                         %>
 
-                                                            <div class="alert alert-success mt-4 col-md-3  <%=style%>"
-                                                                 role="alert" id="msg">
-                                                                <%=msg%>
-                                                            </div>
+                                                        <div class="alert alert-success mt-4 col-md-3  <%=style%>"
+                                                             role="alert" id="msg">
+                                                            <%=msg%>
+                                                        </div>
                                                     </form>
                                                     <div style="height: 300px; overflow-y: scroll">
                                                         <table class="table" id="table_all_users">
@@ -239,7 +252,26 @@
                                                             </c:forEach>
                                                             </tbody>
                                                         </table>
+
                                                     </div>
+                                                    <nav aria-label="Page navigation example">
+                                                        <ul class="pagination">
+                                                            
+                                                            <c:set var="totalPages"
+                                                                   value="${totalPages != null ? totalPages : 0}"/>
+
+                                                            <c:if test="${totalPages > 0}">
+                                                                <c:forEach var="p" begin="0" end="${totalPages - 1}">
+                                                                    <c:set var="url"
+                                                                           value="${pageContext.request.contextPath}/ServletUserController?urlAction=paginate&amp;page=${p * 5}"/>
+                                                                    <li class="page-item">
+                                                                        <a class="page-link" href="${url}">${p + 1}</a>
+                                                                    </li>
+                                                                </c:forEach>
+                                                            </c:if>
+
+                                                        </ul>
+                                                    </nav>
                                                 </div>
                                             </div>
                                         </div>
@@ -283,25 +315,7 @@
 
                                         </tbody>
                                     </table>
-                                    <nav aria-label="Page navigation example">
-                                        <ul class="pagination">
-                                            <li class="page-item">
-                                                <a class="page-link" href="#" aria-label="Previous">
-                                                    <span aria-hidden="true">&laquo;</span>
-                                                    <span class="sr-only">Previous</span>
-                                                </a>
-                                            </li>
-                                            <li class="page-item"><a class="page-link" href="#">1</a></li>
-                                            <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                            <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                            <li class="page-item">
-                                                <a class="page-link" href="#" aria-label="Next">
-                                                    <span aria-hidden="true">&raquo;</span>
-                                                    <span class="sr-only">Next</span>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </nav>
+
                                 </div>
 
                             </div>
@@ -320,12 +334,12 @@
 
                 <script>
 
-                    function searchCEP(){
+                    function searchCEP() {
 
                         let cep = $("#zipCode").val();
 
 
-                        $.getJSON("https://viacep.com.br/ws/"+ cep +"/json/?callback=?", function(dados) {
+                        $.getJSON("https://viacep.com.br/ws/" + cep + "/json/?callback=?", function (dados) {
 
                             if (!("erro" in dados)) {
                                 $("zipCode").val(dados.cep)
@@ -337,19 +351,19 @@
                         })
                     }
 
-                    function changeImage(imageUser, filePhoto){
+                    function changeImage(imageUser, filePhoto) {
 
                         let imageUserPreview = document.getElementById(imageUser);
                         let filePhotoInput = document.getElementById(filePhoto).files[0];
                         let reader = new FileReader();
 
-                        reader.onloadend = function(){
+                        reader.onloadend = function () {
                             imageUserPreview.src = reader.result
                         }
 
-                        if(filePhotoInput){
+                        if (filePhotoInput) {
                             reader.readAsDataURL(filePhotoInput);
-                        }else{
+                        } else {
                             imageUserPreview.src = "";
                         }
 
@@ -359,6 +373,7 @@
                         let name = document.getElementById("search").value;
 
                         if (name != null && name !== "" && name.trim() !== "") {
+
 
                             let urlAction = document.getElementById("create_user_form").action;
                             $.ajax({
@@ -418,7 +433,8 @@
                             }
                         }
                         document.getElementById("select").selectedIndex = 0;
-                        document.getElementById("masculino").checked  = true;
+                        document.getElementById("masculino").checked = false;
+                        document.getElementById("feminino").checked = false;
                         document.getElementById("image-user").src = "assets/images/user-default.png"
                     }
 

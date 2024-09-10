@@ -18,6 +18,23 @@ public class DAOUserRepository {
         connection = SingleConnection.getConnection();
     }
 
+    public int totalPages(Long idUserLogged) throws SQLException {
+        String sql = "select count(1) as total from tb_login where user_id = ?";
+        PreparedStatement statement = connection.prepareStatement(sql);
+        statement.setLong(1, idUserLogged);
+
+        ResultSet result = statement.executeQuery();
+        result.next();
+
+        double registrations = result.getDouble("total");
+
+        double perPage = 5.0;
+
+        int totalPages = (int) Math.ceil(registrations / perPage);
+
+        return totalPages;
+    }
+
     public Login saveUser(Login user, Long idUserLogged) throws Exception {
 
         if (user.isNew()) {
@@ -41,7 +58,7 @@ public class DAOUserRepository {
             statement.execute();
             connection.commit();
 
-            if(user.getPhotoUser() != null && !user.getPhotoUser().isEmpty()){
+            if (user.getPhotoUser() != null && !user.getPhotoUser().isEmpty()) {
                 sql = "UPDATE tb_login set profile_image_url = ?, profile_image_extension = ? WHERE login = ?";
                 statement = connection.prepareStatement(sql);
 
@@ -65,7 +82,7 @@ public class DAOUserRepository {
             connection.commit();
 
 
-            if(user.getPhotoUser() != null && !user.getPhotoUser().isEmpty()){
+            if (user.getPhotoUser() != null && !user.getPhotoUser().isEmpty()) {
                 sql = "UPDATE tb_login set profile_image_url = ?, profile_image_extension = ? WHERE id = ?";
                 statement = connection.prepareStatement(sql);
 
@@ -87,7 +104,7 @@ public class DAOUserRepository {
 
         List<Login> users = new ArrayList<>();
 
-        String sql = "SELECT * FROM tb_login WHERE upper(name) LIKE upper(?) AND (profile != 'ADMINISTRADOR' OR profile IS NULL) AND user_id = ?";
+        String sql = "SELECT * FROM tb_login WHERE upper(name) LIKE upper(?) AND (profile != 'ADMINISTRADOR' OR profile IS NULL) AND user_id = ? limit 5";
 
         PreparedStatement statement = connection.prepareStatement(sql);
         statement.setString(1, "%" + name + "%");
@@ -104,14 +121,38 @@ public class DAOUserRepository {
 
     }
 
+    public List<Login> getAllUsersPaginated(Long idUserLogged, int offset) throws Exception {
+
+        List<Login> users = new ArrayList<>();
+
+        String sql = "SELECT * FROM tb_login WHERE (profile != 'ADMINISTRADOR' OR profile IS NULL) AND user_id = ?  order by name offset ? limit 5";
+
+        PreparedStatement statement = connection.prepareStatement(sql);
+        statement.setLong(1, idUserLogged);
+        statement.setInt(2, offset);
+
+        ResultSet result = statement.executeQuery();
+
+        while (result.next()) {
+            Login user = new Login();
+            setDataUser(user, result);
+            users.add(user);
+        }
+
+        return users;
+
+    }
+
+
     public List<Login> getAllUsers(Long idUserLogged) throws Exception {
 
         List<Login> users = new ArrayList<>();
 
-        String sql = "SELECT * FROM tb_login WHERE (profile != 'ADMINISTRADOR' OR profile IS NULL) AND user_id = ?";
+        String sql = "SELECT * FROM tb_login WHERE (profile != 'ADMINISTRADOR' OR profile IS NULL) AND user_id = ? limit 5";
 
         PreparedStatement statement = connection.prepareStatement(sql);
         statement.setLong(1, idUserLogged);
+
         ResultSet result = statement.executeQuery();
 
         while (result.next()) {
@@ -152,7 +193,6 @@ public class DAOUserRepository {
     public Login searchUserLoggedByLogin(String login) throws SQLException {
 
         String sql = "SELECT * FROM tb_login WHERE upper(login) = upper(?)";
-
         PreparedStatement statement = connection.prepareStatement(sql);
         statement.setString(1, login);
         ResultSet result = statement.executeQuery();
@@ -166,7 +206,8 @@ public class DAOUserRepository {
             user.setPassword(result.getString("password"));
             user.setProfile(result.getString("profile"));
             user.setGender(result.getString("gender"));
-            user.setPhotoUser(result.getString("profile_image_url"));
+            user.setPhotoUser(result.getString("profile_image_url")); // Verifique se este valor está correto
+            System.out.println("Photo User URL in DAO: " + user.getPhotoUser());
         }
 
         return user;
@@ -183,7 +224,7 @@ public class DAOUserRepository {
 
         Login user = new Login();
         while (result.next()) {
-            setDataUser(user,result);
+            setDataUser(user, result);
         }
 
         return user;
