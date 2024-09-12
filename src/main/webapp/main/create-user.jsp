@@ -91,6 +91,12 @@
                                                             <span class="form-bar"></span>
                                                             <label class="float-label">Telefone</label>
                                                         </div>
+                                                        <div class="form-group form-default form-static-label">
+                                                            <input type="date" name="birthDate" class="form-control"
+                                                                   value="${dataLogin.birthDate}">
+                                                            <span class="form-bar"></span>
+                                                            <label class="float-label">Data de nascimento</label>
+                                                        </div>
                                                         <div class="form-group form-default">
                                                             <input type="text" name="zipCode"
                                                                    class="form-control" required

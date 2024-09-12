@@ -1,6 +1,7 @@
 package model;
 
 import java.io.Serializable;
+import java.sql.Date;
 
 public class Login implements Serializable {
 
@@ -20,6 +21,7 @@ public class Login implements Serializable {
     private String state;
     private String number;
     private String phoneNumber;
+    private Date birthDate;
 
 
     public boolean isNew() {
@@ -158,6 +160,14 @@ public class Login implements Serializable {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    public Date getBirthDate() {
+        return birthDate;
+    }
+
+    public void setBirthDate(Date birthDate) {
+        this.birthDate = birthDate;
     }
 }
 

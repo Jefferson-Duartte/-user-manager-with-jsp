@@ -38,7 +38,9 @@ public class DAOUserRepository {
     public Login saveUser(Login user, Long idUserLogged) throws Exception {
 
         if (user.isNew()) {
-            String sql = "INSERT INTO public.tb_login(login, password, name, email, user_id, profile, gender, zipCode, street, neighborhood, city, state, number, phone_number) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+            String sql =
+                    "INSERT INTO public.tb_login(login, password, name, email, user_id, profile, gender, zipCode, street, neighborhood, city, state, number, phone_number, birth_date) " +
+                            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
             PreparedStatement statement = connection.prepareStatement(sql);
 
             statement.setString(1, user.getLogin());
@@ -55,6 +57,7 @@ public class DAOUserRepository {
             statement.setString(12, user.getState());
             statement.setString(13, user.getNumber());
             statement.setString(14, user.getPhoneNumber());
+            statement.setDate(15, user.getBirthDate());
 
             statement.execute();
             connection.commit();
@@ -73,7 +76,7 @@ public class DAOUserRepository {
             }
 
         } else {
-            String sql = "UPDATE public.tb_login SET login=?, password=?, name=?, email=?, profile=?, gender=?, zipCode=?, street=?, neighborhood=?, city=?, state=?, number=?  WHERE id = ?";
+            String sql = "UPDATE public.tb_login SET login=?, password=?, name=?, email=?, profile=?, gender=?, zipCode=?, street=?, neighborhood=?, city=?, state=?, number=?, phone_number=?, birth_date=? WHERE id = ?";
 
             PreparedStatement statement = connection.prepareStatement(sql);
 
@@ -288,6 +291,7 @@ public class DAOUserRepository {
         user.setState(result.getString("state"));
         user.setNumber(result.getString("number"));
         user.setPhoneNumber(result.getString("phone_number"));
+        user.setBirthDate(result.getDate("birth_date"));
     }
 
     public void setStatment(PreparedStatement statement, Login user) throws SQLException {
@@ -303,8 +307,9 @@ public class DAOUserRepository {
         statement.setString(10, user.getCity());
         statement.setString(11, user.getState());
         statement.setString(12, user.getNumber());
-        statement.setLong(13, user.getId());
-        statement.setString(14, user.getPhoneNumber());
+        statement.setString(13, user.getPhoneNumber());
+        statement.setDate(14, user.getBirthDate());
+        statement.setLong(15, user.getId());
     }
 
 }
