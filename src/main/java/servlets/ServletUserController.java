@@ -15,7 +15,7 @@ import org.apache.tomcat.util.codec.binary.Base64;
 import org.apache.tomcat.util.http.fileupload.servlet.ServletFileUpload;
 
 import java.io.IOException;
-import java.text.SimpleDateFormat;
+import java.sql.Date;
 import java.util.List;
 
 @MultipartConfig
@@ -152,6 +152,8 @@ public class ServletUserController extends ServletGenericUtil {
             String number = request.getParameter("number");
             String phoneNumber = request.getParameter("phoneNumber");
             String birthDate = request.getParameter("birthDate");
+            String income = request.getParameter("income");
+            income = income.split("R\\$\\s*")[1].replaceAll("\\.", "").replaceAll("\\,", ".");
 
             Login user = new Login();
             user.setId(id != null && !id.isEmpty() ? Long.parseLong(id) : null);
@@ -168,7 +170,8 @@ public class ServletUserController extends ServletGenericUtil {
             user.setState(state);
             user.setNumber(number);
             user.setPhoneNumber(phoneNumber);
-            user.setBirthDate(new java.sql.Date(new SimpleDateFormat("dd-MM-yyyy").parse(birthDate).getTime()));
+            user.setBirthDate(Date.valueOf(birthDate));
+            user.setIncome(Double.parseDouble(income));
 
             if (ServletFileUpload.isMultipartContent(request)) {
                 Part part = request.getPart("filePhoto");

@@ -39,8 +39,8 @@ public class DAOUserRepository {
 
         if (user.isNew()) {
             String sql =
-                    "INSERT INTO public.tb_login(login, password, name, email, user_id, profile, gender, zipCode, street, neighborhood, city, state, number, phone_number, birth_date) " +
-                            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+                    "INSERT INTO public.tb_login(login, password, name, email, user_id, profile, gender, zipCode, street, neighborhood, city, state, number, phone_number, birth_date, income) " +
+                            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
             PreparedStatement statement = connection.prepareStatement(sql);
 
             statement.setString(1, user.getLogin());
@@ -58,6 +58,7 @@ public class DAOUserRepository {
             statement.setString(13, user.getNumber());
             statement.setString(14, user.getPhoneNumber());
             statement.setDate(15, user.getBirthDate());
+            statement.setDouble(16, user.getIncome());
 
             statement.execute();
             connection.commit();
@@ -76,7 +77,7 @@ public class DAOUserRepository {
             }
 
         } else {
-            String sql = "UPDATE public.tb_login SET login=?, password=?, name=?, email=?, profile=?, gender=?, zipCode=?, street=?, neighborhood=?, city=?, state=?, number=?, phone_number=?, birth_date=? WHERE id = ?";
+            String sql = "UPDATE public.tb_login SET login=?, password=?, name=?, email=?, profile=?, gender=?, zipCode=?, street=?, neighborhood=?, city=?, state=?, number=?, phone_number=?, birth_date=?, income=? WHERE id = ?";
 
             PreparedStatement statement = connection.prepareStatement(sql);
 
@@ -152,7 +153,7 @@ public class DAOUserRepository {
 
         List<Login> users = new ArrayList<>();
 
-        String sql = "SELECT * FROM tb_login WHERE (profile != 'ADMINISTRADOR' OR profile IS NULL) AND user_id = ? limit 5";
+        String sql = "SELECT * FROM tb_login WHERE (profile != 'ADMINISTRADOR' OR profile IS NULL) AND user_id = ? order by name limit 5";
 
         PreparedStatement statement = connection.prepareStatement(sql);
         statement.setLong(1, idUserLogged);
@@ -292,6 +293,7 @@ public class DAOUserRepository {
         user.setNumber(result.getString("number"));
         user.setPhoneNumber(result.getString("phone_number"));
         user.setBirthDate(result.getDate("birth_date"));
+        user.setIncome(result.getDouble("income"));
     }
 
     public void setStatment(PreparedStatement statement, Login user) throws SQLException {
@@ -309,7 +311,8 @@ public class DAOUserRepository {
         statement.setString(12, user.getNumber());
         statement.setString(13, user.getPhoneNumber());
         statement.setDate(14, user.getBirthDate());
-        statement.setLong(15, user.getId());
+        statement.setDouble(15, user.getIncome());
+        statement.setLong(16, user.getId());
     }
 
 }

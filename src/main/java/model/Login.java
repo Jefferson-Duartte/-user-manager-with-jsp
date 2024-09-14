@@ -22,6 +22,7 @@ public class Login implements Serializable {
     private String number;
     private String phoneNumber;
     private Date birthDate;
+    private Double income;
 
 
     public boolean isNew() {
@@ -168,6 +169,14 @@ public class Login implements Serializable {
 
     public void setBirthDate(Date birthDate) {
         this.birthDate = birthDate;
+    }
+
+    public Double getIncome() {
+        return income;
+    }
+
+    public void setIncome(Double income) {
+        this.income = income;
     }
 }
 

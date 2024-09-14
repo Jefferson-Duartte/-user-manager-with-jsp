@@ -57,6 +57,7 @@
                                                             <label style="display: block;" for="img-file">Foto de
                                                                 perfil:</label>
                                                             <c:if test="${dataLogin.photoUser != null && dataLogin.photoUser != ''}">
+                                                                <p>Clique para baixar</p>
                                                                 <a href="<%=request.getContextPath()%>/ServletUserController?urlAction=downloadUserPhoto&id=${dataLogin.id}">
                                                                     <img id="image-user" src="${dataLogin.photoUser}"
                                                                          width="70px">
@@ -96,6 +97,13 @@
                                                                    value="${dataLogin.birthDate}">
                                                             <span class="form-bar"></span>
                                                             <label class="float-label">Data de nascimento</label>
+                                                        </div>
+                                                        <div class="form-group form-default">
+                                                            <input type="text" name="income" id="income"
+                                                                   class="form-control" required
+                                                                   value="${dataLogin.income}">
+                                                            <span class="form-bar"></span>
+                                                            <label class="float-label">Renda mensal</label>
                                                         </div>
                                                         <div class="form-group form-default">
                                                             <input type="text" name="zipCode"
@@ -346,6 +354,17 @@
 
 
                 <script>
+
+                    $("#income").maskMoney({showSymbol: true, symbol: "R$", decimal: ",", thousands: "."})
+
+                    const formater = new Intl.NumberFormat("pt-BR", {
+                        currency: 'BRL',
+                        minimumFractionDigits: 2,
+
+                    })
+
+                    $("#income").val(formater.format($("#income").val()))
+                    $("#income").focus()
 
                     function searchCEP() {
 

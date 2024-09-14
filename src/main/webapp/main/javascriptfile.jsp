@@ -8,7 +8,8 @@
 <!-- waves js -->
 <script src="<%=request.getContextPath()%>/assets/pages/waves/js/waves.min.js"></script>
 <!-- jquery slimscroll js -->
-<script type="text/javascript" src="<%=request.getContextPath()%>/assets/js/jquery-slimscroll/jquery.slimscroll.js "></script>
+<script type="text/javascript"
+        src="<%=request.getContextPath()%>/assets/js/jquery-slimscroll/jquery.slimscroll.js "></script>
 <%--<!-- modernizr js -->--%>
 <script type="text/javascript" src="<%=request.getContextPath()%>/assets/js/modernizr/modernizr.js "></script>
 <!-- slimscroll js -->
@@ -28,3 +29,4 @@
 <!-- custom js -->
 <script type="text/javascript" src="<%=request.getContextPath()%>/assets/pages/dashboard/custom-dashboard.js"></script>
 <script type="text/javascript" src="<%=request.getContextPath()%>/assets/js/script.js "></script>
+<script type="text/javascript" src="<%=request.getContextPath()%>/assets/js/jquery.maskMoney.js"></script>
