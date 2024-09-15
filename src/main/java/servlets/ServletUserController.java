@@ -2,6 +2,7 @@ package servlets;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dao.DAOUserRepository;
+import dto.SalaryGraphDTO;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
@@ -116,6 +117,25 @@ public class ServletUserController extends ServletGenericUtil {
                         response.getOutputStream().write(Base64.decodeBase64(user.getPhotoUser().split("\\,")[1]));
                     }
 
+                } else if (action.equalsIgnoreCase("incomeGraph")) {
+                    String startDate = request.getParameter("startDate");
+                    String endDate = request.getParameter("endDate");
+
+                    if (startDate == null || startDate.isEmpty() && endDate == null || endDate.isEmpty()) {
+
+                        SalaryGraphDTO dto = daoUserRepository.createAverageSalaryChart(super.getIdLoggedUser(request));
+
+                        ObjectMapper mapper = new ObjectMapper();
+                        String json = mapper.writeValueAsString(dto);
+                        response.getWriter().write(json);
+
+                    } else {
+                        SalaryGraphDTO dto = daoUserRepository.createAverageSalaryChart(super.getIdLoggedUser(request), startDate, endDate);
+
+                        ObjectMapper mapper = new ObjectMapper();
+                        String json = mapper.writeValueAsString(dto);
+                        response.getWriter().write(json);
+                    }
                 }
             } else {
                 request.setAttribute("totalPages", daoUserRepository.totalPages(this.getIdLoggedUser(request)));

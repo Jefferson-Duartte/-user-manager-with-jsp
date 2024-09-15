@@ -1,12 +1,10 @@
 package dao;
 
 import connection.SingleConnection;
+import dto.SalaryGraphDTO;
 import model.Login;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,6 +15,61 @@ public class DAOUserRepository {
     public DAOUserRepository() {
         connection = SingleConnection.getConnection();
     }
+
+    public SalaryGraphDTO createAverageSalaryChart(Long idLoggedUser, String startDate, String endDate) throws Exception {
+        String sql = "select avg (income) as average_income, profile from tb_login where user_id = ? and birth_date >= ? and birth_date <= ? group by profile";
+
+        PreparedStatement statement = connection.prepareStatement(sql);
+        statement.setLong(1, idLoggedUser);
+        statement.setDate(2, Date.valueOf(startDate));
+        statement.setDate(3, Date.valueOf(endDate));
+
+        ResultSet resultSet = statement.executeQuery();
+
+        List<String> profiles = new ArrayList<>();
+        List<Double> averagesIncomes = new ArrayList<>();
+
+        SalaryGraphDTO salaryGraphDTO = new SalaryGraphDTO();
+
+        while (resultSet.next()) {
+            Double averageIncome = resultSet.getDouble("average_income");
+            String profile = resultSet.getString("profile");
+            profiles.add(profile);
+            averagesIncomes.add(averageIncome);
+        }
+
+        salaryGraphDTO.setProfiles(profiles);
+        salaryGraphDTO.setAveragesIncomes(averagesIncomes);
+
+        return salaryGraphDTO;
+    }
+
+    public SalaryGraphDTO createAverageSalaryChart(Long idUserLogged) throws Exception {
+        String sql = "select avg (income) as average_income, profile from tb_login where user_id = ? group by profile";
+
+        PreparedStatement statement = connection.prepareStatement(sql);
+        statement.setLong(1, idUserLogged);
+
+        ResultSet resultSet = statement.executeQuery();
+
+        List<String> profiles = new ArrayList<>();
+        List<Double> averagesIncomes = new ArrayList<>();
+
+        SalaryGraphDTO salaryGraphDTO = new SalaryGraphDTO();
+
+        while (resultSet.next()) {
+            Double averageIncome = resultSet.getDouble("average_income");
+            String profile = resultSet.getString("profile");
+            profiles.add(profile);
+            averagesIncomes.add(averageIncome);
+        }
+
+        salaryGraphDTO.setProfiles(profiles);
+        salaryGraphDTO.setAveragesIncomes(averagesIncomes);
+
+        return salaryGraphDTO;
+    }
+
 
     public int totalPages(Long idUserLogged) throws SQLException {
         String sql = "select count(1) as total from tb_login where user_id = ?";
@@ -314,5 +367,6 @@ public class DAOUserRepository {
         statement.setDouble(15, user.getIncome());
         statement.setLong(16, user.getId());
     }
+
 
 }

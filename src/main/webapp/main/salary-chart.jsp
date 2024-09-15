@@ -40,7 +40,7 @@
 
                                                 <form class="form-material"
                                                       action="<%= request.getContextPath()%>/ServletUserController"
-                                                      method="get">
+                                                      method="get" id="form-chart">
 
                                                     <input type="hidden" name="urlAction" id="urlAction"
                                                            value="generateGraph"/>
@@ -87,32 +87,52 @@
                 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
                 <script>
 
+                    let myChart = new Chart(document.getElementById('myChart'))
+
                     function generateGraph() {
 
-                        var myChart = new Chart(
-                            document.getElementById('myChart'),
-                            {
-                                type: 'line',
-                                data: {
-                                    labels: [
-                                        'January',
-                                        'February',
-                                        'March',
-                                        'April',
-                                        'May',
-                                        'June',
-                                    ],
-                                    datasets: [{
-                                        label: 'My First dataset',
-                                        backgroundColor: 'rgb(255, 99, 132)',
-                                        borderColor: 'rgb(255, 99, 132)',
-                                        data: [0, 10, 5, 2, 20, 30, 45],
-                                    }]
-                                },
-                                options: {}
+                        let urlAction = document.getElementById("form-chart").action
+
+                        let startDate = document.getElementById("start_date").value;
+                        let endDate = document.getElementById("end_date").value;
+
+                        $.ajax({
+                            method: "get",
+                            url: urlAction,
+                            data: "startDate=" + startDate + "&endDate=" + endDate + '&urlAction=incomeGraph',
+                            dataType: "json",
+                            success: function (resp) {
+
+                                myChart.destroy()
+
+                                myChart = new Chart(
+                                    document.getElementById('myChart'),
+                                    {
+                                        type: 'line',
+                                        data: {
+                                            labels: resp.profiles
+                                            ,
+                                            datasets: [{
+                                                label: 'Média Salárial',
+                                                backgroundColor: 'rgb(255, 99, 132)',
+                                                borderColor: 'rgb(255, 99, 132)',
+                                                data: resp.averagesIncomes,
+                                            }]
+                                        },
+                                        options: {}
+                                    }
+                                )
                             }
-                        )
+
+                        }).fail(function (xhr, status, errorThrown) {
+                            console.error("Status: " + status);
+                            console.error("Erro: " + errorThrown);
+                            alert("Erro ao buscar dados para o gráfico: " + xhr.responseText);
+                        });
+
+
                     }
+
                 </script>
 </body>
 
