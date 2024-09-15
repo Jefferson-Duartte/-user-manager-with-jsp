@@ -59,11 +59,11 @@
             <li/>
 
             <li>
-                <a href="<%=request.getContextPath()%>/ServletUserController?urlAction=getUsers"
-                   class="waves-effect waves-dark">
+                <a href="<%=request.getContextPath()%>/main/salary-chart.jsp"
+                   class=" waves-effect waves-dark">
                     <span class="pcoded-micon"><i class="ti-clipboard"></i></span>
                     <span class="pcoded-mtext"
-                          data-i18n="nav.form-components.main">Gerar Relatórios</span>
+                          data-i18n="nav.form-components.main">Gráfico de Salário</span>
                     <span class="pcoded-mcaret"></span>
                 </a>
             <li/>
